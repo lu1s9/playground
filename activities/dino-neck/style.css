@@ -1,0 +1,155 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #cde4d2;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #3a5c44;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+.stage {
+  position: fixed;
+  inset: 0;
+}
+
+canvas {
+  display: block;
+}
+
+/* ------- HUD ------- */
+.hud {
+  position: fixed;
+  top: 24px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.score {
+  font-size: 56px;
+  font-weight: 900;
+  color: #3a5c44;
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.6);
+  letter-spacing: -2px;
+}
+
+.combo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #6d9379;
+  letter-spacing: 1px;
+  min-height: 24px;
+  text-transform: uppercase;
+}
+
+.combo.hot {
+  color: #d97373;
+  animation: pulse 0.35s ease-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ------- Overlay / cards ------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(205, 228, 210, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 10;
+  padding: 24px;
+}
+
+.overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.card {
+  background: #fff;
+  border: 4px solid #6d9379;
+  border-radius: 24px;
+  padding: 36px 40px;
+  text-align: center;
+  box-shadow: 0 14px 0 -4px rgba(109, 147, 121, 0.3);
+  max-width: 380px;
+  width: 100%;
+}
+
+.card h1 {
+  font-size: 38px;
+  font-weight: 900;
+  color: #3a5c44;
+  margin-bottom: 10px;
+  letter-spacing: -1px;
+}
+
+.card p {
+  color: #6d9379;
+  margin-bottom: 6px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.controls {
+  font-size: 12px !important;
+  opacity: 0.7;
+  margin-top: 14px;
+  margin-bottom: 22px !important;
+  letter-spacing: 0.5px;
+}
+
+button {
+  background: #6d9379;
+  color: white;
+  border: none;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 14px 38px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease,
+    box-shadow 0.12s ease;
+  box-shadow: 0 4px 0 0 #4d6a55;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:hover {
+  background: #5d8369;
+}
+
+button:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 0 #4d6a55;
+}

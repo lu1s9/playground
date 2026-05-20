@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playground</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      min-height: 100%;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #cde4d2;
+      color: #3a5c44;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      gap: 32px;
+    }
+    h1 {
+      font-size: clamp(40px, 6vw, 64px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      text-align: center;
+    }
+    p.sub {
+      color: #6d9379;
+      font-size: 16px;
+      max-width: 480px;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .activities {
+      display: grid;
+      gap: 18px;
+      width: 100%;
+      max-width: 720px;
+    }
+    a.card {
+      display: block;
+      background: #fff;
+      border: 4px solid #6d9379;
+      border-radius: 20px;
+      padding: 26px 30px;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 8px 0 -2px rgba(109, 147, 121, 0.3);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    a.card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 0 -2px rgba(109, 147, 121, 0.4);
+    }
+    a.card h2 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    a.card p {
+      font-size: 14px;
+      color: #6d9379;
+    }
+    footer {
+      color: #6d9379;
+      font-size: 13px;
+      opacity: 0.75;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Playground</h1>
+  <p class="sub">Mini actividades web. Distintos enfoques, herramientas y estilos.</p>
+
+  <div class="activities">
+    <a class="card" href="activities/dino-neck/">
+      <h2>Dino Neck</h2>
+      <p>Canvas 2D · JavaScript vanilla · juego endless</p>
+    </a>
+  </div>
+
+  <footer>1 actividad · más en camino</footer>
+</body>
+</html>

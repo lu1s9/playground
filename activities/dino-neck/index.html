@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dino Neck</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="stage">
+    <canvas id="game"></canvas>
+
+    <div class="hud">
+      <div id="score" class="score">0</div>
+      <div id="combo" class="combo"></div>
+    </div>
+
+    <div id="overlay" class="overlay visible">
+      <div class="card">
+        <h1 id="overlay-title">Dino Neck</h1>
+        <p id="overlay-text">Atrapá los fragmentos. Un fallo y se acabó.</p>
+        <p class="controls">← → / A D · mouse · touch</p>
+        <button id="overlay-button" type="button">Empezar</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
