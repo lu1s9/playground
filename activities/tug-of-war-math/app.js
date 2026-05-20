@@ -168,7 +168,8 @@ function pressKey(team, key) {
   if (state.mode === "1p" && team === 2) return;
 
   if (key === "clear") {
-    state.inputs[team] = "";
+    // Backspace: borra solo el último dígito (más útil que clear-all).
+    state.inputs[team] = state.inputs[team].slice(0, -1);
   } else if (key === "submit") {
     submitAnswer(team);
     return;

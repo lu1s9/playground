@@ -434,22 +434,27 @@ button {
 }
 
 .keypad .key-clear {
-  background: var(--rojo-soft);
-  color: var(--rojo-deep);
+  background: var(--bg);
+  color: var(--muted);
+  font-size: clamp(20px, 2.6vw, 26px);
 }
 
 .keypad .key-submit {
-  background: var(--azul-soft);
-  color: var(--azul-deep);
+  background: #10b981;
+  color: white;
+  border-color: #047857;
+  font-weight: 900;
+  font-size: clamp(22px, 2.8vw, 28px);
+  box-shadow: 0 3px 0 0 #047857;
 }
 
-.team-2 .keypad .key-submit {
-  background: var(--rojo-soft);
-  color: var(--rojo-deep);
+.keypad .key-submit:hover {
+  background: #059669;
 }
-.team-2 .keypad .key-clear {
-  background: var(--bg);
-  color: var(--muted);
+
+.keypad .key-submit:active {
+  transform: translateY(2px) scale(0.96);
+  box-shadow: 0 1px 0 0 #047857;
 }
 
 /* ---------------------------------------------------------
