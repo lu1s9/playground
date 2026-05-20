@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Memo Test · Memoria espacial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Geist+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="phase-idle">
+
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <a class="home-link" href="../../" aria-label="Volver al catálogo">←</a>
+
+  <div class="layout">
+
+    <!-- LEFT SIDEBAR — Run log -->
+    <aside class="sidebar sidebar-left" aria-label="Historial del run">
+      <header class="sidebar-head">
+        <span class="eyebrow">run log</span>
+        <h2 class="sidebar-title">Niveles</h2>
+      </header>
+      <ol class="phase-log" id="phase-log">
+        <!-- 10 mini-grids inserted by JS -->
+      </ol>
+    </aside>
+
+    <!-- MAIN STAGE -->
+    <main class="stage">
+
+      <!-- IDLE: rules + start -->
+      <section id="idle" class="idle">
+        <header class="hero">
+          <span class="eyebrow">test de memoria</span>
+          <h1 class="hero-title">Memo<span class="hero-sep">/</span><em>Test</em></h1>
+          <p class="hero-sub">10 niveles · modo hardcore · sin segundas chances</p>
+        </header>
+
+        <div class="rules">
+          <ol class="rules-list">
+            <li>
+              <span class="rule-num">01</span>
+              <span class="rule-text">Memoriza dónde aparecen los números en la cuadrícula.</span>
+            </li>
+            <li>
+              <span class="rule-num">02</span>
+              <span class="rule-text">Los números se ocultan, las casillas se quedan encendidas.</span>
+            </li>
+            <li>
+              <span class="rule-num">03</span>
+              <span class="rule-text">Haz click en orden: 1 → 2 → 3 → …</span>
+            </li>
+            <li>
+              <span class="rule-num">04</span>
+              <span class="rule-text">Un error termina el run. Modo hardcore.</span>
+            </li>
+          </ol>
+        </div>
+
+        <button id="start-btn" class="primary" type="button">
+          <span>Iniciar test</span>
+          <span aria-hidden="true">→</span>
+        </button>
+
+        <div class="records">
+          <div class="record">
+            <span class="record-label">Record</span>
+            <span class="record-value" id="record-score">0</span>
+          </div>
+          <div class="record">
+            <span class="record-label">Nivel máx</span>
+            <span class="record-value" id="record-level">—</span>
+          </div>
+          <div class="record">
+            <span class="record-label">Runs</span>
+            <span class="record-value" id="record-runs">0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- GAME: HUD + grid + status -->
+      <section id="game" class="game">
+        <header class="game-head">
+          <div class="hud">
+            <span class="hud-label">Nivel</span>
+            <span class="hud-value">
+              <span id="level-current">01</span>
+              <span class="hud-divider">/</span>
+              <span id="level-total">10</span>
+            </span>
+          </div>
+          <div class="hud">
+            <span class="hud-label">Puntaje</span>
+            <span class="hud-value" id="score">0</span>
+          </div>
+          <div class="hud">
+            <span class="hud-label">Fase</span>
+            <span class="hud-value" id="phase-label">—</span>
+          </div>
+        </header>
+
+        <div class="grid" id="grid" role="grid" aria-label="Cuadrícula de memoria">
+          <!-- 16 cells inserted by JS -->
+        </div>
+
+        <div class="countdown-bar" aria-hidden="true">
+          <div class="countdown-fill" id="countdown-fill"></div>
+        </div>
+
+        <p class="game-status" id="game-status" aria-live="polite">
+          Memoriza la posición de los números.
+        </p>
+      </section>
+
+      <!-- RESULT: game over or completed all 10 -->
+      <section id="result" class="result">
+        <span class="eyebrow result-eyebrow" id="result-eyebrow">Run terminado</span>
+        <h2 class="result-title" id="result-title">Game over</h2>
+        <p class="result-sub" id="result-sub">Un error te sacó del run.</p>
+
+        <div class="result-stats">
+          <div class="result-stat">
+            <span class="stat-label">Puntaje</span>
+            <span class="stat-value stat-value-big" id="final-score">0</span>
+          </div>
+          <div class="result-stat">
+            <span class="stat-label">Nivel</span>
+            <span class="stat-value" id="final-level">—</span>
+          </div>
+          <div class="result-stat">
+            <span class="stat-label">Record</span>
+            <span class="stat-value" id="final-record">0</span>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button id="restart-btn" class="primary" type="button">
+            <span>Reiniciar test</span>
+            <span aria-hidden="true">→</span>
+          </button>
+          <button id="quit-btn" class="secondary" type="button">Volver al menú</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- RIGHT SIDEBAR — Stats -->
+    <aside class="sidebar sidebar-right" aria-label="Estadísticas de la sesión">
+      <header class="sidebar-head">
+        <span class="eyebrow">sesión</span>
+        <h2 class="sidebar-title">Stats</h2>
+      </header>
+      <div class="stat-cards">
+        <div class="stat-card stat-card-life" id="stat-life">
+          <span class="stat-label">Vida</span>
+          <span class="stat-value">●</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Record</span>
+          <span class="stat-value" id="stat-record">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Runs jugados</span>
+          <span class="stat-value" id="stat-runs">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Promedio</span>
+          <span class="stat-value" id="stat-avg">—</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

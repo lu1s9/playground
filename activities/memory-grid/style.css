@@ -1,0 +1,781 @@
+/* ============================================================
+   Memo / Test — Cognitive Test Subject (dark lab aesthetic)
+   ============================================================ */
+
+:root {
+  --bg: #08080b;
+  --surface: #14141a;
+  --surface-2: #1c1c24;
+  --border: #2a2a32;
+  --border-strong: #3c3c48;
+
+  --text: #f5f5ed;
+  --text-soft: #6c6c78;
+  --text-mute: #3c3c44;
+
+  --amber: #ffb800;
+  --amber-bright: #ffd34d;
+  --amber-glow: rgba(255, 184, 0, 0.4);
+
+  --red: #ff3855;
+  --red-glow: rgba(255, 56, 85, 0.45);
+
+  --green: #00e878;
+  --blue: #4d7fff;
+
+  --font-display: "Major Mono Display", "Courier New", monospace;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  /* dot grid background — very subtle */
+  background-image:
+    radial-gradient(circle, rgba(245,245,237,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+/* ============================================================
+   Scanlines overlay — CRT hint, very subtle
+   ============================================================ */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(255, 255, 255, 0.012) 2px,
+    rgba(255, 255, 255, 0.012) 3px
+  );
+  mix-blend-mode: screen;
+}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr 240px;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar {
+  padding: 28px 22px;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.sidebar-right {
+  border-right: none;
+  border-left: 1px solid var(--border);
+}
+
+.stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  overflow-y: auto;
+}
+
+/* Mobile */
+@media (max-width: 920px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Home link
+   ============================================================ */
+.home-link {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 1100;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.home-link:hover {
+  background: var(--surface-2);
+  border-color: var(--text-soft);
+}
+
+.home-link:active {
+  transform: scale(0.94);
+}
+
+/* ============================================================
+   Sidebar common
+   ============================================================ */
+.sidebar-head {
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.eyebrow {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 6px;
+}
+
+.sidebar-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 1;
+}
+
+/* ============================================================
+   Left sidebar — run log (10 mini-grids)
+   ============================================================ */
+.phase-log {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phase-log li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s ease;
+}
+
+.phase-log li.is-passed {
+  border-color: rgba(0, 232, 120, 0.4);
+}
+
+.phase-log li.is-failed {
+  border-color: rgba(255, 56, 85, 0.6);
+}
+
+.phase-log li.is-current {
+  border-color: var(--amber);
+  background: rgba(255, 184, 0, 0.06);
+}
+
+.phase-log-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-soft);
+  letter-spacing: 0.05em;
+  min-width: 24px;
+}
+
+.phase-log li.is-passed .phase-log-num { color: var(--green); }
+.phase-log li.is-failed .phase-log-num { color: var(--red); }
+.phase-log li.is-current .phase-log-num { color: var(--amber); }
+
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  width: 56px;
+  height: 56px;
+}
+
+.mini-cell {
+  background: var(--border);
+  width: 100%;
+  height: 100%;
+}
+
+.mini-cell.is-marked {
+  background: var(--text-soft);
+}
+
+.is-passed .mini-cell.is-marked {
+  background: var(--green);
+}
+
+.is-failed .mini-cell.is-marked {
+  background: var(--red);
+}
+
+.is-current .mini-cell.is-marked {
+  background: var(--amber);
+}
+
+/* ============================================================
+   Right sidebar — stat cards
+   ============================================================ */
+.stat-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.stat-card-life .stat-value {
+  color: var(--green);
+  font-size: 26px;
+}
+
+body.phase-game .stat-card-life .stat-value {
+  color: var(--amber);
+  animation: pulse-life 2s ease-in-out infinite;
+}
+
+@keyframes pulse-life {
+  0%, 100% { opacity: 1; text-shadow: 0 0 8px var(--amber-glow); }
+  50% { opacity: 0.7; text-shadow: 0 0 16px var(--amber-glow); }
+}
+
+/* ============================================================
+   STAGE — phases visibility
+   ============================================================ */
+.stage > section {
+  width: 100%;
+  max-width: 560px;
+  display: none;
+}
+
+.phase-idle #idle,
+.phase-game #game,
+.phase-result #result {
+  display: block;
+}
+
+/* ============================================================
+   IDLE / instructions
+   ============================================================ */
+.idle {
+  text-align: left;
+  padding: 16px 0;
+}
+
+.hero {
+  margin-bottom: 36px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(54px, 8vw, 84px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  color: var(--text);
+  text-transform: uppercase;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+
+.hero-title em {
+  font-style: normal;
+  color: var(--amber);
+}
+
+.hero-sep {
+  display: inline-block;
+  color: var(--text-mute);
+  margin: 0 0.1em;
+  font-weight: 400;
+}
+
+.hero-sub {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-soft);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rules {
+  margin-bottom: 36px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--amber);
+}
+
+.rules-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rules-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.rule-num {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--amber);
+  letter-spacing: 0.04em;
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+.rule-text {
+  flex: 1;
+}
+
+.records {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.record {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.record-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.record-value {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.primary {
+  background: var(--amber);
+  color: var(--bg);
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 18px 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 260px;
+  justify-content: space-between;
+  border: 2px solid var(--amber);
+  transition: background 0.15s ease, transform 0.1s ease,
+    box-shadow 0.15s ease;
+}
+
+.primary:hover {
+  background: var(--amber-bright);
+  border-color: var(--amber-bright);
+  box-shadow: 0 0 24px 2px var(--amber-glow);
+}
+
+.primary:active {
+  transform: translateY(2px);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--text-soft);
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  border: 1px solid var(--border-strong);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.secondary:hover {
+  color: var(--text);
+  border-color: var(--text-soft);
+}
+
+/* ============================================================
+   GAME — HUD + grid + countdown + status
+   ============================================================ */
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.game-head {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  gap: 24px;
+}
+
+.hud {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hud-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.hud-value {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-divider {
+  color: var(--text-mute);
+  margin: 0 4px;
+}
+
+/* Score pop animation when it increases */
+.hud-value.is-popping {
+  animation: score-pop 0.3s ease-out;
+}
+
+@keyframes score-pop {
+  0% { color: var(--text); }
+  50% { color: var(--amber); transform: scale(1.08); }
+  100% { color: var(--text); transform: scale(1); }
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1 / 1;
+  padding: 8px;
+}
+
+.grid.is-shaking {
+  animation: grid-shake 0.4s ease-out;
+}
+
+@keyframes grid-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+.cell {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 700;
+  color: transparent;
+  position: relative;
+  transition: background 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  cursor: default;
+  user-select: none;
+}
+
+/* Cell with number visible (memorize phase) */
+.cell.is-revealing {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--bg);
+  box-shadow: 0 0 24px var(--amber-glow);
+  animation: cell-reveal 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+@keyframes cell-reveal {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Cell active but number hidden (recall phase) */
+.cell.is-active {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: transparent;
+  box-shadow: 0 0 16px var(--amber-glow);
+  cursor: pointer;
+}
+
+.cell.is-active:hover {
+  background: var(--amber-bright);
+  border-color: var(--amber-bright);
+  box-shadow: 0 0 28px var(--amber-glow);
+}
+
+.cell.is-active:active {
+  transform: scale(0.95);
+}
+
+/* Cell clicked correctly (during recall) */
+.cell.is-cleared {
+  background: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--text-mute);
+  box-shadow: none;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Cell that the player clicked WRONG */
+.cell.is-wrong {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--bg);
+  box-shadow: 0 0 32px var(--red-glow);
+  animation: cell-wrong 0.4s ease-out;
+}
+
+@keyframes cell-wrong {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* Cell that SHOULD have been next (revealed on game over) */
+.cell.is-revealed-error {
+  background: rgba(255, 184, 0, 0.15);
+  border-color: var(--amber);
+  color: var(--amber);
+  animation: cell-reveal 0.3s ease-out;
+}
+
+/* Number text inside cells (only visible when needed) */
+.cell .num {
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* Countdown bar */
+.countdown-bar {
+  width: 100%;
+  max-width: 420px;
+  height: 4px;
+  background: var(--surface);
+  overflow: hidden;
+  position: relative;
+}
+
+.countdown-fill {
+  height: 100%;
+  background: var(--amber);
+  width: 100%;
+  transform-origin: left;
+  box-shadow: 0 0 12px var(--amber-glow);
+  transition: background 0.2s ease;
+}
+
+.countdown-fill.is-danger {
+  background: var(--red);
+  box-shadow: 0 0 14px var(--red-glow);
+}
+
+/* Game status */
+.game-status {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  text-align: center;
+  min-height: 16px;
+}
+
+.game-status.is-warning {
+  color: var(--amber);
+}
+
+.game-status.is-danger {
+  color: var(--red);
+}
+
+/* ============================================================
+   RESULT
+   ============================================================ */
+.result {
+  text-align: left;
+  padding: 32px 0;
+}
+
+.result-eyebrow {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+
+.result-eyebrow.is-win {
+  color: var(--green);
+}
+
+.result-title {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7vw, 72px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  color: var(--text);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  animation: glitch-in 0.5s steps(4) both;
+}
+
+.result-title.is-win {
+  color: var(--green);
+}
+
+@keyframes glitch-in {
+  0% { opacity: 0; transform: translateX(-12px); letter-spacing: 0.2em; }
+  30% { opacity: 0.7; transform: translateX(6px); }
+  60% { transform: translateX(-2px); letter-spacing: 0.04em; }
+  100% { opacity: 1; transform: translateX(0); letter-spacing: 0.02em; }
+}
+
+.result-sub {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-soft);
+  margin-bottom: 36px;
+  max-width: 420px;
+  line-height: 1.5;
+}
+
+.result-stats {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 36px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.result-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-value-big {
+  font-size: 48px !important;
+  color: var(--amber) !important;
+  letter-spacing: -0.02em !important;
+}
+
+.is-win .stat-value-big {
+  color: var(--green) !important;
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
