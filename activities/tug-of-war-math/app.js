@@ -142,8 +142,8 @@ function endGame(winnerTeam) {
   if (state.mode === "1p") {
     winnerTextEl.textContent =
       winnerTeam === 1
-        ? "Le ganaste a la CPU. Buena cabeza."
-        : "La CPU te ganó esta vez. La revancha es ya.";
+        ? "Le ganaste a la CPU. Bien jugado."
+        : "La CPU te ganó esta vez. Es hora de la revancha.";
   } else {
     winnerTextEl.textContent = `El equipo ${
       winnerTeam === 1 ? "AZUL" : "ROJO"
@@ -257,7 +257,7 @@ function scheduleCpu() {
     if (state.phase !== "playing") return;
     const correct = Math.random() > p.error;
 
-    // "Tipear" la respuesta en el input por un momento, para que se sienta humano.
+    // "Teclear" la respuesta en el input por un momento, para que se sienta humano.
     const intended = state.questions[2].answer;
     const shown = correct ? intended : intended + (randInt(0, 1) === 0 ? -1 : 1);
     state.inputs[2] = String(shown);

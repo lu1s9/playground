@@ -137,7 +137,7 @@ function showStart() {
   state = STATE.IDLE;
   showOverlay(
     "Dino Neck",
-    "Atrapá los fragmentos. Un fallo y se acabó.",
+    "Atrapa los fragmentos. Un fallo y se acabó.",
     "Empezar"
   );
 }
