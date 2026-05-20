@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Tug of War: Math</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="phase-setup">
+
+  <a class="home-link" href="../../" aria-label="Volver al catálogo">←</a>
+
+  <!-- Setup screen -->
+  <section id="setup" class="setup">
+    <div class="setup-inner">
+      <h1>Tug of War: <span class="accent">Math</span></h1>
+      <p class="lead">Cuatro operaciones, una soga, un solo ganador.</p>
+
+      <div class="picker">
+        <h2>Jugadores</h2>
+        <div class="opts opts-mode">
+          <button data-mode="1p" class="opt active" type="button">
+            <span class="opt-title">1 jugador</span>
+            <span class="opt-desc">Vos vs CPU. Layout izquierda-derecha. Funciona en cualquier dispositivo.</span>
+          </button>
+          <button data-mode="2p" class="opt" type="button">
+            <span class="opt-title">2 jugadores</span>
+            <span class="opt-desc">Mismo dispositivo, uno enfrente del otro. Optimizado para tablet. Sólo touch.</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="picker">
+        <h2>Dificultad</h2>
+        <div class="opts opts-difficulty">
+          <button data-difficulty="easy" class="opt" type="button">
+            <span class="opt-title">Fácil</span>
+            <span class="opt-desc">Suma y resta · 1 a 10</span>
+          </button>
+          <button data-difficulty="medium" class="opt active" type="button">
+            <span class="opt-title">Medio</span>
+            <span class="opt-desc">4 operaciones · 1 a 20</span>
+          </button>
+          <button data-difficulty="hard" class="opt" type="button">
+            <span class="opt-title">Difícil</span>
+            <span class="opt-desc">4 operaciones · 1 a 50</span>
+          </button>
+        </div>
+      </div>
+
+      <button id="start-btn" class="primary" type="button">Empezar</button>
+    </div>
+  </section>
+
+  <!-- Game -->
+  <section id="game" class="game">
+
+    <div class="team team-1" data-team="1">
+      <div class="team-header">
+        <span class="team-name">Equipo Azul</span>
+      </div>
+      <div class="question" id="q-1">?</div>
+      <div class="input" id="i-1">0</div>
+      <div class="keypad">
+        <button data-key="1" type="button">1</button>
+        <button data-key="2" type="button">2</button>
+        <button data-key="3" type="button">3</button>
+        <button data-key="4" type="button">4</button>
+        <button data-key="5" type="button">5</button>
+        <button data-key="6" type="button">6</button>
+        <button data-key="7" type="button">7</button>
+        <button data-key="8" type="button">8</button>
+        <button data-key="9" type="button">9</button>
+        <button data-key="clear" class="key-clear" type="button">×</button>
+        <button data-key="0" type="button">0</button>
+        <button data-key="submit" class="key-submit" type="button">✓</button>
+      </div>
+    </div>
+
+    <div class="rope-scene">
+      <div class="rope">
+        <div class="rope-line"></div>
+        <div class="rope-center"></div>
+        <div class="rope-marker" id="marker">
+          <div class="marker-knot"></div>
+        </div>
+      </div>
+      <div class="rope-labels">
+        <span class="label label-1">AZUL</span>
+        <span class="label label-2">ROJO</span>
+      </div>
+    </div>
+
+    <div class="team team-2" data-team="2">
+      <div class="team-header">
+        <span class="team-name">Equipo Rojo</span>
+      </div>
+      <div class="question" id="q-2">?</div>
+      <div class="input" id="i-2">0</div>
+      <div class="keypad">
+        <button data-key="1" type="button">1</button>
+        <button data-key="2" type="button">2</button>
+        <button data-key="3" type="button">3</button>
+        <button data-key="4" type="button">4</button>
+        <button data-key="5" type="button">5</button>
+        <button data-key="6" type="button">6</button>
+        <button data-key="7" type="button">7</button>
+        <button data-key="8" type="button">8</button>
+        <button data-key="9" type="button">9</button>
+        <button data-key="clear" class="key-clear" type="button">×</button>
+        <button data-key="0" type="button">0</button>
+        <button data-key="submit" class="key-submit" type="button">✓</button>
+      </div>
+    </div>
+
+    <button id="quit-btn" class="quit" type="button" aria-label="Volver al menú">⏎</button>
+  </section>
+
+  <!-- Game over -->
+  <div id="gameover" class="overlay">
+    <div class="card">
+      <h1 id="winner-title">¡Ganador!</h1>
+      <p id="winner-text"></p>
+      <div class="actions">
+        <button id="restart-btn" class="primary" type="button">Otra vez</button>
+        <button id="back-btn" class="secondary" type="button">Cambiar modo</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
