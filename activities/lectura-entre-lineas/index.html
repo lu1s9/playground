@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lectura entre líneas</title>
+  <meta name="description" content="Lectura entre líneas. Textos cortos con audio en español de México y preguntas de comprensión." />
+  <script defer src="https://analytics.lu1s9.dev/script.js" data-website-id="b43d0a09-e1eb-4a2e-ba0b-0c2025f98c3b"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Petrona:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="phase-idle">
+
+  <div class="page">
+
+    <!-- ───── MARGEN IZQUIERDO ───── -->
+    <aside class="margin margin-left" aria-hidden="true">
+      <span class="m-spine">Antología de lecturas breves · No. I · Edición primera</span>
+      <span class="m-folio">— folio —</span>
+    </aside>
+
+    <!-- ───── HOJA PRINCIPAL ───── -->
+    <main class="paper" role="main">
+
+      <a class="home-link" href="../../" aria-label="Volver al catálogo">← Volver</a>
+
+      <!-- IDLE -->
+      <section id="idle" class="idle">
+        <header class="masthead">
+          <span class="figref">comprensión lectora · primaria</span>
+          <h1 class="title">
+            Entre<br/><em>líneas.</em>
+          </h1>
+          <p class="lede">
+            Cinco lecturas breves. Por cada una, una pregunta para pensar.
+            Si necesitás escuchar el texto, hay un botón de audio en cada página.
+          </p>
+        </header>
+
+        <div class="how">
+          <ol class="how-list">
+            <li>
+              <span class="how-num">01</span>
+              <span class="how-body">Leés un texto corto en silencio. Tomate tu tiempo.</span>
+            </li>
+            <li>
+              <span class="how-num">02</span>
+              <span class="how-body">Si querés, podés escuchar la lectura en voz alta tantas veces como necesites.</span>
+            </li>
+            <li>
+              <span class="how-num">03</span>
+              <span class="how-body">Respondés una pregunta sobre lo que entendiste, no sobre lo que recordás.</span>
+            </li>
+          </ol>
+        </div>
+
+        <button id="start-btn" class="primary" type="button">
+          <span class="primary-text">Empezar la antología</span>
+          <span class="primary-glyph" aria-hidden="true">→</span>
+        </button>
+
+        <footer class="idle-footer">
+          <span class="footer-dot">·</span>
+          <span class="footer-text">audios en español de México · narración neural</span>
+          <span class="footer-dot">·</span>
+        </footer>
+      </section>
+
+      <!-- READING / QUIZ -->
+      <section id="reading" class="reading">
+        <header class="reading-head">
+          <span class="folio">
+            <span class="folio-label">Pieza</span>
+            <span class="folio-current" id="r-current">01</span>
+            <span class="folio-divider">/</span>
+            <span class="folio-total" id="r-total">05</span>
+          </span>
+          <span class="score-block">
+            <span class="score-label">Puntos</span>
+            <span class="score-value" id="score">0</span>
+          </span>
+        </header>
+
+        <article class="article">
+          <h2 class="article-title" id="text-title">—</h2>
+          <p class="article-body" id="text-body">—</p>
+
+          <div class="audio-control">
+            <button id="audio-btn" class="audio-btn" type="button" aria-label="Escuchar el texto">
+              <svg class="audio-ring" viewBox="0 0 64 64" aria-hidden="true">
+                <circle class="audio-track" cx="32" cy="32" r="28" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <circle class="audio-progress" id="audio-progress" cx="32" cy="32" r="28" fill="none" stroke="currentColor" stroke-width="2" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round" transform="rotate(-90 32 32)" />
+              </svg>
+              <span class="audio-glyph" id="audio-glyph" aria-hidden="true">▶</span>
+            </button>
+            <span class="audio-label" id="audio-label">Escuchar el texto</span>
+          </div>
+        </article>
+
+        <div class="rule" aria-hidden="true"></div>
+
+        <section class="question">
+          <span class="q-eyebrow">Pregunta</span>
+          <p class="q-prompt" id="q-prompt">—</p>
+          <div class="q-options" id="q-options" role="listbox">
+            <!-- 4 opciones inyectadas por JS -->
+          </div>
+        </section>
+
+        <div class="reveal" id="reveal" aria-live="polite">
+          <span class="reveal-glyph" id="reveal-glyph">—</span>
+          <span class="reveal-text" id="reveal-text">—</span>
+        </div>
+
+        <button id="quit-btn" class="ghost-quit" type="button">↩ Salir de la sesión</button>
+      </section>
+
+      <!-- RESULT -->
+      <section id="result" class="result">
+        <header class="result-head">
+          <span class="figref">antología leída</span>
+          <h2 class="result-title" id="result-title">—</h2>
+        </header>
+
+        <div class="result-score-block">
+          <span class="result-score-label">Puntaje final</span>
+          <span class="result-score-value" id="final-score">0</span>
+        </div>
+
+        <ul class="result-stats">
+          <li>
+            <span class="stat-num" id="final-correct">0</span>
+            <span class="stat-label">aciertos</span>
+          </li>
+          <li>
+            <span class="stat-num" id="final-wrong">0</span>
+            <span class="stat-label">errores</span>
+          </li>
+          <li>
+            <span class="stat-num" id="final-audio">0</span>
+            <span class="stat-label">audios usados</span>
+          </li>
+        </ul>
+
+        <div class="result-actions">
+          <button id="restart-btn" class="primary" type="button">
+            <span class="primary-text">Otra antología</span>
+            <span class="primary-glyph" aria-hidden="true">↻</span>
+          </button>
+          <button id="back-btn" class="secondary" type="button">Volver al inicio</button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ───── MARGEN DERECHO ───── -->
+    <aside class="margin margin-right" aria-hidden="true">
+      <span class="m-spine">— Lectura · comprensión · español de México —</span>
+      <span class="m-folio">narración neural</span>
+    </aside>
+
+  </div>
+
+  <audio id="audio-el" preload="auto"></audio>
+
+  <script src="texts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
