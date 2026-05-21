@@ -2,6 +2,8 @@
 // Dino Neck — Vanilla Canvas 2D, sin dependencias.
 // ============================================================
 
+const track = (e, d) => { try { window.umami?.track(e, d); } catch (_) {} };
+
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const overlay = document.getElementById("overlay");
@@ -66,6 +68,7 @@ let fragSpeed = 4;
 let shake = 0;
 let lastT = 0;
 let inputMode = "keys";
+let gameStartedAt = 0;
 
 const input = {
   left: false,
@@ -118,14 +121,22 @@ function startGame() {
   camera.y = 0;
   initDino();
   state = STATE.PLAY;
+  gameStartedAt = Date.now();
   hideOverlay();
   updateHUD();
+  track("game_start");
 }
 
 function endGame() {
   state = STATE.OVER;
   shake = 18;
   bestStreak = Math.max(bestStreak, streak);
+  track("game_complete", {
+    score,
+    streak,
+    best_streak: bestStreak,
+    duration_seconds: Math.round((Date.now() - gameStartedAt) / 1000),
+  });
   showOverlay(
     "Game Over",
     `Puntaje: ${score} · Racha: ${streak} (mejor: ${bestStreak})`,
@@ -558,6 +569,16 @@ function loop(t) {
 // ------------------------------------------------------------
 // Boot
 // ------------------------------------------------------------
+window.addEventListener("pagehide", () => {
+  if (state === STATE.PLAY) {
+    track("game_abandon", {
+      score,
+      streak,
+      duration_seconds: Math.round((Date.now() - gameStartedAt) / 1000),
+    });
+  }
+});
+
 resize();
 initDino();
 showStart();

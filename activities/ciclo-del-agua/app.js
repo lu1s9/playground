@@ -1,6 +1,8 @@
 (() => {
   'use strict';
 
+  const track = (e, d) => { try { window.umami?.track(e, d); } catch (_) {} };
+
   const stages = [
     {
       id: 1,
@@ -52,11 +54,20 @@
 
   let current = 1;
   let switchTimer = null;
+  let cycleCompleted = false;
 
   function render(stageId, { fromUser = true } = {}) {
     const stage = stages.find((s) => s.id === stageId);
     if (!stage) return;
     current = stageId;
+
+    if (fromUser) {
+      track("stage_view", { stage: stageId, name: stage.title });
+      if (stageId === stages.length && !cycleCompleted) {
+        cycleCompleted = true;
+        track("cycle_completed");
+      }
+    }
 
     // Animar transición del panel
     if (fromUser) {
@@ -94,7 +105,9 @@
   }
 
   function next() {
-    const nextId = current === stages.length ? 1 : current + 1;
+    const wasOnLast = current === stages.length;
+    const nextId = wasOnLast ? 1 : current + 1;
+    if (wasOnLast) track("cycle_restarted");
     render(nextId);
   }
 

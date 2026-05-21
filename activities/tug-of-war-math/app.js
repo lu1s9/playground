@@ -2,6 +2,8 @@
 // Tug of War: Math — DOM + CSS + JS vanilla
 // ============================================================
 
+const track = (e, d) => { try { window.umami?.track(e, d); } catch (_) {} };
+
 const WIN_THRESHOLD = 7;
 
 const CPU_PARAMS = {
@@ -21,6 +23,7 @@ const state = {
   questions: { 1: null, 2: null },
   inputs: { 1: "", 2: "" },
   cpuTimeout: null,
+  startedAt: 0,
 };
 
 // ------------------------------------------------------------
@@ -123,9 +126,11 @@ function startGame() {
   state.inputs[2] = "";
   state.questions[1] = genQuestion();
   state.questions[2] = genQuestion();
+  state.startedAt = Date.now();
 
   setBodyPhase("playing");
   updateUI();
+  track("game_start", { mode: state.mode, difficulty: state.difficulty });
 
   if (state.mode === "1p") {
     scheduleCpu();
@@ -135,6 +140,14 @@ function startGame() {
 function endGame(winnerTeam) {
   if (state.cpuTimeout) clearTimeout(state.cpuTimeout);
   state.cpuTimeout = null;
+
+  track("game_complete", {
+    mode: state.mode,
+    difficulty: state.difficulty,
+    winner: winnerTeam === 1 ? "blue" : "red",
+    human_won: state.mode === "1p" ? winnerTeam === 1 : null,
+    duration_seconds: Math.round((Date.now() - state.startedAt) / 1000),
+  });
 
   winnerTitleEl.textContent = winnerTeam === 1 ? "¡Ganó Azul!" : "¡Ganó Rojo!";
   winnerTitleEl.className = winnerTeam === 1 ? "win-1" : "win-2";
@@ -189,6 +202,17 @@ function submitAnswer(team) {
 }
 
 function applyResult(team, correct) {
+  // En modo 1p el team 2 es CPU: solo trackeamos respuestas humanas.
+  const isHuman = state.mode === "2p" || team === 1;
+  if (isHuman) {
+    track("answer", {
+      correct,
+      team: team === 1 ? "blue" : "red",
+      mode: state.mode,
+      difficulty: state.difficulty,
+    });
+  }
+
   // team 1 (azul) tira hacia rope NEGATIVO, team 2 (rojo) hacia POSITIVO.
   const teamDir = team === 1 ? -1 : 1;
 
@@ -323,6 +347,17 @@ window.addEventListener("keydown", (e) => {
     e.key === "Delete"
   ) {
     pressKey(1, "clear");
+  }
+});
+
+window.addEventListener("pagehide", () => {
+  if (state.phase === "playing") {
+    track("game_abandon", {
+      mode: state.mode,
+      difficulty: state.difficulty,
+      rope: state.rope,
+      duration_seconds: Math.round((Date.now() - state.startedAt) / 1000),
+    });
   }
 });
 

@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Playground</title>
+  <script defer src="https://analytics.lu1s9.dev/script.js" data-website-id="b43d0a09-e1eb-4a2e-ba0b-0c2025f98c3b"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
@@ -99,5 +100,17 @@
   </div>
 
   <footer>5 actividades · más en camino</footer>
+
+  <script>
+    (() => {
+      const track = (e, d) => { try { window.umami?.track(e, d); } catch (_) {} };
+      document.querySelectorAll('.card').forEach((card) => {
+        card.addEventListener('click', () => {
+          const slug = card.getAttribute('href').split('/').filter(Boolean).pop();
+          track('activity_card_click', { slug });
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

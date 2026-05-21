@@ -3,6 +3,8 @@
 // 10 niveles, N celdas en cada uno (3 → 12). Un error = game over.
 // ============================================================
 
+const track = (e, d) => { try { window.umami?.track(e, d); } catch (_) {} };
+
 const TOTAL_LEVELS = 10;
 const GRID_SIZE = 16;
 
@@ -41,6 +43,7 @@ const state = {
   recallStartedAt: 0,
   timers: { memorize: null, recall: null },
   locked: true,
+  startedAt: 0,
 };
 
 // ------------------------------------------------------------
@@ -206,6 +209,8 @@ function startGame() {
   state.score = 0;
   state.history = [];
   state.locked = true;
+  state.startedAt = Date.now();
+  track("game_start");
 
   renderGridShell();
   renderRunLog();
@@ -335,6 +340,13 @@ function completeLevel() {
     passed: true,
   });
 
+  track("level_complete", {
+    level: state.level,
+    n_cells: N,
+    recall_seconds: Math.round(elapsedRecall),
+    score: state.score,
+  });
+
   clearTimeout(state.timers.recall);
   stopCountdown();
 
@@ -381,6 +393,14 @@ function endGame(won) {
   const levelsPassed = state.history.filter((h) => h.passed).length;
   const reached = won ? TOTAL_LEVELS : levelsPassed;
   const isNewRecord = state.score > records.score;
+
+  track("game_complete", {
+    won,
+    level_reached: reached,
+    score: state.score,
+    new_record: isNewRecord,
+    duration_seconds: Math.round((Date.now() - state.startedAt) / 1000),
+  });
 
   records.score = Math.max(records.score, state.score);
   records.level = Math.max(records.level, reached);
@@ -463,6 +483,17 @@ function updateSidebarStats() {
 $("start-btn").addEventListener("click", startGame);
 $("restart-btn").addEventListener("click", startGame);
 $("quit-btn").addEventListener("click", quitToIdle);
+
+window.addEventListener("pagehide", () => {
+  if (state.phase === "game") {
+    const levelsPassed = state.history.filter((h) => h.passed).length;
+    track("game_abandon", {
+      level_reached: levelsPassed,
+      score: state.score,
+      duration_seconds: Math.round((Date.now() - state.startedAt) / 1000),
+    });
+  }
+});
 
 renderRunLog();
 updateSidebarStats();

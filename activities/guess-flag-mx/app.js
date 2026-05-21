@@ -3,6 +3,8 @@
 // Quiz con assets reales (32 escudos SVG desde Wikimedia).
 // ============================================================
 
+const track = (e, d) => { try { window.umami?.track(e, d); } catch (_) {} };
+
 // ------------------------------------------------------------
 // Datos de las 32 entidades + posiciones en el tile cartogram.
 // Cartogram: grid 7 cols × 6 rows, geográficamente aproximado.
@@ -69,6 +71,7 @@ const state = {
   countdownInterval: null,
   remaining: 0,
   awaitingNext: false,
+  startedAt: 0,
 };
 
 // ------------------------------------------------------------
@@ -204,6 +207,8 @@ function startGame() {
   state.correctCount = 0;
   state.wrongCount = 0;
   state.history = [];
+  state.startedAt = Date.now();
+  track("game_start");
 
   resetMap();
   qTotalEl.textContent = QUESTIONS_PER_ROUND;
@@ -351,6 +356,13 @@ function onAnswer(answerId) {
     timeSpent: Math.min(TIME_PER_QUESTION, Math.round(elapsed)),
   });
 
+  track("answer", {
+    state_id: correct.id,
+    state_name: correct.name,
+    correct: wasCorrect,
+    elapsed_seconds: Math.min(TIME_PER_QUESTION, Math.round(elapsed)),
+  });
+
   // Marcar visualmente la opción correcta y, si erró, la elegida
   optionsEl.querySelectorAll(".option").forEach((btn) => {
     btn.setAttribute("disabled", "true");
@@ -385,6 +397,14 @@ function onTimeout() {
     timeSpent: TIME_PER_QUESTION,
   });
 
+  track("answer", {
+    state_id: correct.id,
+    state_name: correct.name,
+    correct: false,
+    timed_out: true,
+    elapsed_seconds: TIME_PER_QUESTION,
+  });
+
   // Mostrar cuál era la correcta
   optionsEl.querySelectorAll(".option").forEach((btn) => {
     btn.setAttribute("disabled", "true");
@@ -402,6 +422,14 @@ function onTimeout() {
 function endGame() {
   stopCountdown();
   resetCurrentMark();
+
+  track("game_complete", {
+    score: state.score,
+    correct_count: state.correctCount,
+    wrong_count: state.wrongCount,
+    best_streak: state.bestStreak,
+    duration_seconds: Math.round((Date.now() - state.startedAt) / 1000),
+  });
 
   finalScoreEl.textContent = state.score;
   finalCorrectEl.textContent = state.correctCount;
@@ -440,6 +468,18 @@ $("restart-btn").addEventListener("click", startGame);
 $("quit-btn").addEventListener("click", () => {
   resetMap();
   setPhase("setup");
+});
+
+window.addEventListener("pagehide", () => {
+  if (state.phase === "quiz") {
+    track("game_abandon", {
+      score: state.score,
+      questions_answered: state.current,
+      correct_count: state.correctCount,
+      wrong_count: state.wrongCount,
+      duration_seconds: Math.round((Date.now() - state.startedAt) / 1000),
+    });
+  }
 });
 
 // ------------------------------------------------------------
