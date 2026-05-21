@@ -319,11 +319,17 @@ document.querySelectorAll(".opts-difficulty .opt").forEach((btn) => {
   });
 });
 
-// Keypads
+// Keypads — usamos pointerdown (NO click) para soportar multi-touch real.
+// click es secuencial por puntero, así que en modo 2p los toques simultáneos
+// de dos jugadores se serializan. pointerdown se dispara por cada dedo
+// independientemente con su propio pointerId.
 document.querySelectorAll(".team").forEach((teamEl) => {
   const team = parseInt(teamEl.dataset.team, 10);
   teamEl.querySelectorAll(".keypad button").forEach((btn) => {
-    btn.addEventListener("click", () => pressKey(team, btn.dataset.key));
+    btn.addEventListener("pointerdown", (e) => {
+      e.preventDefault(); // evita el click sintético posterior + foco/selección
+      pressKey(team, btn.dataset.key);
+    });
   });
 });
 

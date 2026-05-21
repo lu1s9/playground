@@ -740,6 +740,11 @@ button {
   transition: transform 0.08s ease, background 0.12s ease,
     box-shadow 0.08s ease;
   box-shadow: 3px 3px 0 0 var(--ink);
+  /* Multi-touch sin delay: deja pasar tap inmediato y previene zoom de doble tap. */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .keypad button:hover {
