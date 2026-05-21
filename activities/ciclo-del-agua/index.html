@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Ciclo del Agua · Playground</title>
+  <meta name="description" content="Lámina interactiva del ciclo del agua. Recorré las cuatro etapas — evaporación, condensación, precipitación y colección — paso a paso." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+
+    <!-- ───── MARGEN IZQUIERDO (anotaciones científicas) ───── -->
+    <aside class="margin margin-left" aria-hidden="true">
+      <svg class="m-sketch m-thermo" viewBox="0 0 60 160">
+        <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+          <rect x="22" y="10" width="16" height="110" rx="8" />
+          <circle cx="30" cy="135" r="16" fill="currentColor" fill-opacity="0.12" />
+          <line x1="30" y1="120" x2="30" y2="135" stroke-width="6" />
+          <line x1="42" y1="30" x2="48" y2="30" />
+          <line x1="42" y1="50" x2="48" y2="50" />
+          <line x1="42" y1="70" x2="48" y2="70" />
+          <line x1="42" y1="90" x2="48" y2="90" />
+          <line x1="42" y1="110" x2="48" y2="110" />
+        </g>
+        <text x="3" y="40" class="m-label">100°</text>
+        <text x="3" y="118" class="m-label">0°</text>
+      </svg>
+
+      <div class="m-note m-note-1">
+        <span class="m-figref">fig. ii</span>
+        <span class="m-text">vapor invisible<br/>asciende por convección</span>
+        <svg viewBox="0 0 80 30" class="m-arrow">
+          <path d="M5 25 Q 40 5, 75 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="3 2" />
+          <path d="M68 13 L 75 18 L 70 24" fill="none" stroke="currentColor" stroke-width="1.3" />
+        </svg>
+      </div>
+
+      <svg class="m-sketch m-drop" viewBox="0 0 80 100">
+        <path d="M40 8 C 18 38, 12 60, 22 78 C 32 96, 56 96, 62 78 C 70 60, 60 38, 40 8 Z" fill="none" stroke="currentColor" stroke-width="1.4" />
+        <path d="M40 8 C 30 28, 26 44, 30 56" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" />
+        <text x="2" y="98" class="m-label">H₂O</text>
+      </svg>
+
+      <div class="m-formula">
+        <span class="m-symbol">∮</span>
+        <span class="m-text m-text-sm">ciclo cerrado<br/>conservación de masa</span>
+      </div>
+    </aside>
+
+    <!-- ───── HOJA PRINCIPAL ───── -->
+    <main class="paper" role="main">
+      <header class="masthead">
+        <div class="masthead-top">
+          <span class="figref">fig. 04 — ciencias naturales</span>
+          <span class="figref">lámina interactiva</span>
+        </div>
+        <h1>El Ciclo<br/><span class="amp">del</span> Agua</h1>
+        <p class="lede">El agua nunca desaparece. Viaja entre los océanos, el cielo y la tierra en un ciclo eterno. Recorré sus cuatro etapas.</p>
+      </header>
+
+      <!-- Indicador de etapas -->
+      <ol class="stage-indicator" aria-label="Progreso del ciclo">
+        <li data-stage="1" class="active">
+          <span class="num">01</span>
+          <span class="name">Evaporación</span>
+        </li>
+        <li data-stage="2">
+          <span class="num">02</span>
+          <span class="name">Condensación</span>
+        </li>
+        <li data-stage="3">
+          <span class="num">03</span>
+          <span class="name">Precipitación</span>
+        </li>
+        <li data-stage="4">
+          <span class="num">04</span>
+          <span class="name">Colección</span>
+        </li>
+      </ol>
+
+      <!-- Escena ilustrada -->
+      <div class="scene-frame">
+        <span class="scene-corner tl" aria-hidden="true"></span>
+        <span class="scene-corner tr" aria-hidden="true"></span>
+        <span class="scene-corner bl" aria-hidden="true"></span>
+        <span class="scene-corner br" aria-hidden="true"></span>
+
+        <svg class="scene" viewBox="0 0 800 500" data-stage="1" role="img" aria-labelledby="scene-title">
+          <title id="scene-title">Paisaje con sol, océano, montañas y nubes mostrando la etapa actual del ciclo del agua.</title>
+
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#c7d8df" />
+              <stop offset="100%" stop-color="#e8dec0" />
+            </linearGradient>
+            <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5d8aa6" />
+              <stop offset="100%" stop-color="#3a607d" />
+            </linearGradient>
+            <filter id="grain" x="0" y="0" width="100%" height="100%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" />
+              <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.08 0" />
+              <feComposite in2="SourceGraphic" operator="in" />
+            </filter>
+          </defs>
+
+          <!-- Cielo -->
+          <rect x="0" y="0" width="800" height="370" fill="url(#sky)" />
+          <rect x="0" y="0" width="800" height="370" fill="url(#sky)" filter="url(#grain)" opacity="0.6" />
+
+          <!-- SOL -->
+          <g class="el sun" transform="translate(640 100)">
+            <g class="sun-rays">
+              <line x1="0" y1="-72" x2="0" y2="-58" />
+              <line x1="51" y1="-51" x2="41" y2="-41" />
+              <line x1="72" y1="0" x2="58" y2="0" />
+              <line x1="51" y1="51" x2="41" y2="41" />
+              <line x1="0" y1="72" x2="0" y2="58" />
+              <line x1="-51" y1="51" x2="-41" y2="41" />
+              <line x1="-72" y1="0" x2="-58" y2="0" />
+              <line x1="-51" y1="-51" x2="-41" y2="-41" />
+            </g>
+            <circle r="42" fill="#d59944" />
+            <circle r="42" fill="none" stroke="#15233a" stroke-width="2" />
+            <circle r="36" fill="none" stroke="#15233a" stroke-width="0.8" stroke-dasharray="1 3" />
+          </g>
+
+          <!-- VAPOR (etapa 1) -->
+          <g class="el vapor">
+            <path d="M180 380 Q 175 340, 190 310 Q 205 280, 195 250 Q 185 220, 200 195" />
+            <path d="M260 380 Q 255 345, 270 320 Q 285 295, 275 270 Q 265 245, 280 220" />
+            <path d="M340 380 Q 335 350, 350 325 Q 365 300, 355 275 Q 345 250, 360 230" />
+          </g>
+
+          <!-- NUBES (etapa 2+) -->
+          <g class="el clouds">
+            <g class="cloud cloud-a" transform="translate(180 140)">
+              <path d="M-50 0 C -55 -22, -25 -32, -10 -22 C 0 -38, 30 -36, 38 -18 C 55 -20, 60 8, 38 12 L -50 12 C -68 10, -68 -2, -50 0 Z" fill="#f1e7cf" stroke="#15233a" stroke-width="2" />
+              <path d="M-32 -8 Q -22 -16, -10 -12" fill="none" stroke="#15233a" stroke-width="0.8" />
+            </g>
+            <g class="cloud cloud-b" transform="translate(380 110)">
+              <path d="M-62 0 C -68 -28, -32 -40, -14 -28 C 0 -46, 36 -44, 46 -22 C 68 -24, 74 10, 46 14 L -62 14 C -82 12, -82 -2, -62 0 Z" fill="#f1e7cf" stroke="#15233a" stroke-width="2" />
+              <path d="M-40 -12 Q -28 -22, -14 -18" fill="none" stroke="#15233a" stroke-width="0.8" />
+            </g>
+            <g class="cloud cloud-c" transform="translate(560 165)">
+              <path d="M-44 0 C -50 -20, -22 -28, -8 -20 C 2 -34, 28 -32, 36 -16 C 52 -18, 56 8, 36 12 L -44 12 C -60 10, -60 -2, -44 0 Z" fill="#f1e7cf" stroke="#15233a" stroke-width="2" />
+            </g>
+          </g>
+
+          <!-- LLUVIA (etapa 3) -->
+          <g class="el rain">
+            <line x1="155" y1="170" x2="148" y2="200" class="drop" style="animation-delay:0s" />
+            <line x1="180" y1="170" x2="173" y2="200" class="drop" style="animation-delay:.18s" />
+            <line x1="205" y1="170" x2="198" y2="200" class="drop" style="animation-delay:.36s" />
+            <line x1="350" y1="140" x2="343" y2="170" class="drop" style="animation-delay:.1s" />
+            <line x1="380" y1="140" x2="373" y2="170" class="drop" style="animation-delay:.28s" />
+            <line x1="410" y1="140" x2="403" y2="170" class="drop" style="animation-delay:.46s" />
+            <line x1="440" y1="140" x2="433" y2="170" class="drop" style="animation-delay:.16s" />
+            <line x1="540" y1="195" x2="533" y2="225" class="drop" style="animation-delay:.22s" />
+            <line x1="570" y1="195" x2="563" y2="225" class="drop" style="animation-delay:.4s" />
+            <line x1="600" y1="195" x2="593" y2="225" class="drop" style="animation-delay:.08s" />
+          </g>
+
+          <!-- MONTAÑAS -->
+          <g class="el mountains">
+            <path d="M 0 380 L 90 290 L 160 340 L 240 240 L 320 300 L 380 270 L 440 320 L 520 260 L 600 310 L 680 280 L 760 320 L 800 305 L 800 380 Z" fill="#b04a35" stroke="#15233a" stroke-width="2" stroke-linejoin="round" />
+            <path d="M 240 240 L 270 280 L 215 280 Z" fill="#f1e7cf" stroke="#15233a" stroke-width="1.5" />
+            <path d="M 520 260 L 548 300 L 495 300 Z" fill="#f1e7cf" stroke="#15233a" stroke-width="1.5" />
+            <path d="M 90 290 L 110 320 L 75 320 Z" fill="#f1e7cf" stroke="#15233a" stroke-width="1.5" />
+          </g>
+
+          <!-- RÍO / ESCURRIMIENTO (etapa 4) -->
+          <g class="el river">
+            <path d="M 240 250 Q 230 290, 245 320 Q 260 350, 240 380" fill="none" stroke="#5d8aa6" stroke-width="5" stroke-linecap="round" />
+            <path d="M 240 250 Q 230 290, 245 320 Q 260 350, 240 380" fill="none" stroke="#15233a" stroke-width="1" stroke-dasharray="3 4" />
+            <path d="M 520 270 Q 510 310, 525 340 Q 540 365, 530 385" fill="none" stroke="#5d8aa6" stroke-width="5" stroke-linecap="round" />
+            <path d="M 520 270 Q 510 310, 525 340 Q 540 365, 530 385" fill="none" stroke="#15233a" stroke-width="1" stroke-dasharray="3 4" />
+          </g>
+
+          <!-- OCÉANO -->
+          <rect x="0" y="380" width="800" height="120" fill="url(#water)" />
+          <g class="ocean-waves" fill="none" stroke="#15233a" stroke-width="1" stroke-linecap="round" opacity="0.55">
+            <path d="M 0 395 Q 30 390, 60 395 T 120 395 T 180 395 T 240 395 T 300 395 T 360 395 T 420 395 T 480 395 T 540 395 T 600 395 T 660 395 T 720 395 T 800 395" />
+            <path d="M 0 415 Q 30 410, 60 415 T 120 415 T 180 415 T 240 415 T 300 415 T 360 415 T 420 415 T 480 415 T 540 415 T 600 415 T 660 415 T 720 415 T 800 415" opacity="0.5" />
+            <path d="M 0 440 Q 30 435, 60 440 T 120 440 T 180 440 T 240 440 T 300 440 T 360 440 T 420 440 T 480 440 T 540 440 T 600 440 T 660 440 T 720 440 T 800 440" opacity="0.3" />
+          </g>
+
+          <!-- Línea de horizonte fina (encuadre) -->
+          <line x1="0" y1="380" x2="800" y2="380" stroke="#15233a" stroke-width="2" />
+
+          <!-- Flechas direccionales del ciclo (sutiles, decorativas) -->
+          <g class="cycle-arrows">
+            <path d="M 100 240 Q 90 200, 110 170" fill="none" stroke="#15233a" stroke-width="1" stroke-dasharray="2 4" opacity="0.45" />
+            <path d="M 700 240 Q 720 300, 700 350" fill="none" stroke="#15233a" stroke-width="1" stroke-dasharray="2 4" opacity="0.45" />
+          </g>
+        </svg>
+      </div>
+
+      <!-- Panel de información de la etapa -->
+      <section class="info" aria-live="polite">
+        <div class="info-header">
+          <span class="stage-tag">Etapa <span data-bind="num">01</span> · de 04</span>
+          <span class="stage-glyph" data-bind="glyph">☀</span>
+        </div>
+        <h2 class="stage-title" data-bind="title">Evaporación</h2>
+        <p class="stage-desc" data-bind="desc">El Sol calienta el agua de océanos, ríos y lagos. El calor convierte el agua líquida en vapor invisible, que sube hacia el cielo.</p>
+        <p class="stage-key" data-bind="key"><span>Concepto clave:</span> el calor transforma el agua líquida en vapor.</p>
+      </section>
+
+      <!-- Controles -->
+      <div class="controls">
+        <button type="button" class="btn btn-prev" aria-label="Etapa anterior">
+          <span class="btn-arrow">←</span>
+          <span class="btn-label">Anterior</span>
+        </button>
+        <span class="kbd-hint" aria-hidden="true">usá ← →</span>
+        <button type="button" class="btn btn-next" aria-label="Etapa siguiente">
+          <span class="btn-label">Siguiente</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+
+      <footer class="paper-footer">
+        <a href="../../" class="back-link">↩ volver al playground</a>
+        <span class="colophon">láminas interactivas · ciencias naturales</span>
+      </footer>
+    </main>
+
+    <!-- ───── MARGEN DERECHO (anotaciones científicas) ───── -->
+    <aside class="margin margin-right" aria-hidden="true">
+      <div class="m-note m-note-2">
+        <span class="m-figref">fig. iii</span>
+        <span class="m-text">condensación al<br/>enfriar el aire</span>
+      </div>
+
+      <svg class="m-sketch m-cycle" viewBox="0 0 110 110">
+        <g fill="none" stroke="currentColor" stroke-width="1.2">
+          <circle cx="55" cy="55" r="42" stroke-dasharray="2 3" />
+          <path d="M 55 13 A 42 42 0 0 1 96 55" stroke-width="1.8" />
+          <path d="M 90 50 L 96 55 L 92 62" stroke-width="1.4" />
+          <circle cx="55" cy="55" r="6" fill="currentColor" fill-opacity="0.15" />
+        </g>
+        <text x="35" y="105" class="m-label">ciclo I</text>
+      </svg>
+
+      <div class="m-formula m-formula-2">
+        <span class="m-symbol-2">H₂O</span>
+        <span class="m-arrow-inline">⇌</span>
+        <span class="m-symbol-2">vapor</span>
+      </div>
+
+      <svg class="m-sketch m-section" viewBox="0 0 100 130">
+        <g fill="none" stroke="currentColor" stroke-width="1.3">
+          <path d="M 10 60 Q 30 30, 50 60 Q 70 90, 90 60" />
+          <path d="M 10 80 Q 30 50, 50 80 Q 70 110, 90 80" opacity="0.6" />
+          <line x1="10" y1="95" x2="90" y2="95" stroke-dasharray="2 2" />
+          <line x1="10" y1="60" x2="10" y2="120" />
+          <line x1="90" y1="60" x2="90" y2="120" />
+          <text x="14" y="128" class="m-label">manto acuífero</text>
+        </g>
+      </svg>
+
+      <div class="m-note m-note-3">
+        <span class="m-figref">nota</span>
+        <span class="m-text m-text-sm">el agua no se crea<br/>ni se destruye.<br/>circula.</span>
+      </div>
+    </aside>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,721 @@
+/* ============================================================
+   El Ciclo del Agua — lámina interactiva
+   Estética: ilustración científica vintage + risograph
+   ============================================================ */
+
+:root {
+  --paper:        #f1e7cf;
+  --paper-deep:   #e6d8b3;
+  --paper-edge:   #d9c89e;
+  --ink:          #15233a;
+  --ink-soft:     #3e4d66;
+  --ink-faint:    #758297;
+  --sky:          #6294b3;
+  --water:        #3a607d;
+  --sun:          #d59944;
+  --sun-glow:     #f0c869;
+  --terra:        #b04a35;
+  --moss:         #6e8a6a;
+
+  --shadow-paper: 0 1px 0 rgba(21, 35, 58, 0.04),
+                  0 12px 28px -16px rgba(21, 35, 58, 0.28),
+                  0 32px 60px -32px rgba(21, 35, 58, 0.22);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Textura de papel global — ruido sutil + grano dorado */
+body {
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(213, 153, 68, 0.06) 0, transparent 38%),
+    radial-gradient(circle at 82% 78%, rgba(98, 148, 179, 0.05) 0, transparent 40%),
+    repeating-linear-gradient(0deg, transparent 0 22px, rgba(21, 35, 58, 0.018) 22px 23px),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.055 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ─── LAYOUT GENERAL ──────────────────────────────────────── */
+.page {
+  display: grid;
+  grid-template-columns: 1fr min(940px, calc(100% - 32px)) 1fr;
+  align-items: start;
+  gap: 0;
+  padding: 56px 0 80px;
+  min-height: 100vh;
+}
+
+.margin {
+  position: relative;
+  min-height: 600px;
+  color: var(--ink);
+  opacity: 0.55;
+  padding: 24px 32px;
+}
+
+.margin-left { grid-column: 1; justify-self: end; }
+.margin-right { grid-column: 3; justify-self: start; }
+
+.paper {
+  grid-column: 2;
+  background: var(--paper);
+  border: 1.5px solid var(--paper-edge);
+  border-radius: 6px;
+  padding: 56px clamp(28px, 5vw, 64px) 48px;
+  box-shadow: var(--shadow-paper);
+  position: relative;
+}
+
+/* Líneas finas internas tipo libreta — solo en bordes */
+.paper::before {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(21, 35, 58, 0.07);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* ─── MASTHEAD ────────────────────────────────────────────── */
+.masthead {
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+.masthead-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 12px;
+  margin-bottom: 28px;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.figref {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.masthead h1 {
+  font-family: 'Fraunces', 'Playfair Display', serif;
+  font-weight: 800;
+  font-variation-settings: 'opsz' 144, 'SOFT' 30;
+  font-size: clamp(48px, 8vw, 96px);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 18px;
+}
+
+.masthead h1 .amp {
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+  color: var(--terra);
+  font-size: 0.78em;
+  padding: 0 0.08em;
+}
+
+.lede {
+  font-family: 'Newsreader', serif;
+  font-size: clamp(15px, 1.7vw, 18px);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 56ch;
+  margin: 0 auto;
+  font-style: italic;
+}
+
+/* ─── INDICADOR DE ETAPAS ─────────────────────────────────── */
+.stage-indicator {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-bottom: 36px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  position: relative;
+}
+
+.stage-indicator::after {
+  content: '';
+  position: absolute;
+  inset: 4px 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  pointer-events: none;
+}
+
+.stage-indicator li {
+  padding: 16px 12px 14px;
+  text-align: center;
+  border-right: 1px solid rgba(21, 35, 58, 0.18);
+  cursor: pointer;
+  transition: background 0.3s ease;
+  position: relative;
+}
+
+.stage-indicator li:last-child { border-right: none; }
+
+.stage-indicator li:hover { background: rgba(21, 35, 58, 0.04); }
+
+.stage-indicator li.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.stage-indicator .num {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+  opacity: 0.75;
+}
+
+.stage-indicator .name {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(13px, 1.6vw, 17px);
+  letter-spacing: -0.01em;
+}
+
+/* ─── ESCENA SVG ──────────────────────────────────────────── */
+.scene-frame {
+  position: relative;
+  margin: 0 0 40px;
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+  padding: 18px;
+  box-shadow:
+    inset 0 0 0 1px var(--paper),
+    inset 0 0 0 2px rgba(21, 35, 58, 0.08);
+}
+
+.scene-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--ink);
+}
+.scene-corner.tl { top: -2px; left: -2px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+.scene-corner.tr { top: -2px; right: -2px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.scene-corner.bl { bottom: -2px; left: -2px; clip-path: polygon(0 0, 100% 100%, 0 100%); }
+.scene-corner.br { bottom: -2px; right: -2px; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+.scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 8 / 5;
+}
+
+/* ─── ELEMENTOS DEL PAISAJE ───────────────────────────────── */
+.scene .el {
+  transition: opacity 0.7s ease;
+}
+
+/* SOL — siempre visible */
+.scene .sun-rays line {
+  stroke: var(--ink);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+[data-stage="1"] .sun {
+  animation: sun-pulse 3.4s ease-in-out infinite;
+  transform-origin: 640px 100px;
+}
+[data-stage="1"] .sun-rays {
+  animation: sun-rays-spin 28s linear infinite;
+  transform-origin: 0 0;
+}
+
+@keyframes sun-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(213, 153, 68, 0)); }
+  50%      { filter: drop-shadow(0 0 14px rgba(240, 200, 105, 0.55)); }
+}
+@keyframes sun-rays-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* VAPOR */
+.scene .vapor {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 4 5;
+  opacity: 0;
+}
+[data-stage="1"] .vapor { opacity: 1; }
+[data-stage="2"] .vapor,
+[data-stage="3"] .vapor,
+[data-stage="4"] .vapor { opacity: 0.45; }
+
+[data-stage="1"] .vapor path {
+  animation: vapor-rise 3.2s ease-in-out infinite;
+}
+[data-stage="1"] .vapor path:nth-child(2) { animation-delay: 0.6s; }
+[data-stage="1"] .vapor path:nth-child(3) { animation-delay: 1.2s; }
+
+@keyframes vapor-rise {
+  0%   { transform: translateY(20px); opacity: 0; }
+  20%  { opacity: 0.9; }
+  85%  { opacity: 0.9; }
+  100% { transform: translateY(-40px); opacity: 0; }
+}
+
+/* NUBES */
+.scene .clouds { opacity: 0; }
+[data-stage="2"] .clouds { opacity: 1; }
+[data-stage="3"] .clouds,
+[data-stage="4"] .clouds { opacity: 0.78; }
+
+[data-stage="2"] .cloud {
+  animation: cloud-bob 4.6s ease-in-out infinite;
+}
+[data-stage="2"] .cloud-b { animation-delay: 0.8s; }
+[data-stage="2"] .cloud-c { animation-delay: 1.6s; }
+
+@keyframes cloud-bob {
+  0%, 100% { transform: translate(var(--cx, 0), var(--cy, 0)); }
+  50%      { transform: translate(var(--cx, 0), calc(var(--cy, 0px) - 6px)); }
+}
+
+/* Setear --cx/--cy con valores del transform original */
+.cloud-a { --cx: 180px; --cy: 140px; transform: translate(180px, 140px); }
+.cloud-b { --cx: 380px; --cy: 110px; transform: translate(380px, 110px); }
+.cloud-c { --cx: 560px; --cy: 165px; transform: translate(560px, 165px); }
+
+/* LLUVIA */
+.scene .rain { opacity: 0; }
+[data-stage="3"] .rain { opacity: 1; }
+[data-stage="4"] .rain { opacity: 0.5; }
+
+.scene .drop {
+  stroke: var(--water);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+[data-stage="3"] .drop {
+  animation: rain-fall 1.2s linear infinite;
+}
+
+@keyframes rain-fall {
+  0%   { transform: translateY(-28px); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(60px); opacity: 0; }
+}
+
+/* RÍO / ESCURRIMIENTO */
+.scene .river { opacity: 0; }
+[data-stage="4"] .river { opacity: 1; }
+
+[data-stage="4"] .river path:nth-child(even) {
+  stroke-dashoffset: 0;
+  animation: river-flow 1.8s linear infinite;
+}
+
+@keyframes river-flow {
+  to { stroke-dashoffset: -14; }
+}
+
+/* Atenuar etapas pasadas según etapa activa */
+[data-stage="2"] .sun  { opacity: 0.85; }
+[data-stage="3"] .sun  { opacity: 0.7;  }
+[data-stage="4"] .sun  { opacity: 0.65; }
+
+/* ─── PANEL DE INFORMACIÓN ────────────────────────────────── */
+.info {
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
+  border: 1.5px solid var(--ink);
+  padding: clamp(24px, 4vw, 36px) clamp(24px, 4vw, 40px);
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.info::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 0.8px solid rgba(21, 35, 58, 0.2);
+  pointer-events: none;
+}
+
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed rgba(21, 35, 58, 0.3);
+  margin-bottom: 18px;
+}
+
+.stage-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.stage-glyph {
+  font-size: 28px;
+  color: var(--terra);
+  font-family: 'Fraunces', serif;
+  line-height: 1;
+  transition: transform 0.5s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+.stage-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-variation-settings: 'opsz' 144;
+  font-size: clamp(32px, 4.4vw, 48px);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+.stage-desc {
+  font-family: 'Newsreader', serif;
+  font-size: clamp(16px, 1.9vw, 19px);
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: 18px;
+  max-width: 60ch;
+}
+
+.stage-key {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-soft);
+  padding-top: 14px;
+  border-top: 1px dashed rgba(21, 35, 58, 0.2);
+}
+
+.stage-key span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--terra);
+  margin-right: 8px;
+}
+
+/* ─── CONTROLES ───────────────────────────────────────────── */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  padding: 14px 22px;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+  position: relative;
+}
+
+.btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.btn:focus-visible {
+  outline: 2px dashed var(--terra);
+  outline-offset: 4px;
+}
+
+.btn-arrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+}
+
+.kbd-hint {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ─── FOOTER DEL PAPER ────────────────────────────────────── */
+.paper-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 24px;
+  border-top: 1px solid rgba(21, 35, 58, 0.2);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.back-link {
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.back-link:hover { color: var(--terra); }
+
+.colophon { color: var(--ink-faint); }
+
+/* ============================================================
+   MÁRGENES DECORATIVOS (anotaciones científicas)
+   solo aparecen en escritorio ≥ 1200px
+   ============================================================ */
+.margin .m-sketch,
+.margin .m-note,
+.margin .m-formula {
+  display: block;
+  margin-bottom: 56px;
+}
+
+.margin .m-sketch { color: var(--ink); }
+
+.m-thermo { width: 56px; }
+.m-drop   { width: 60px; }
+.m-cycle  { width: 90px; }
+.m-section { width: 86px; }
+
+.m-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  fill: var(--ink-soft);
+  letter-spacing: 0.08em;
+}
+
+.m-note {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 140px;
+  margin-bottom: 56px;
+}
+
+.m-figref {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--terra);
+}
+
+.m-text {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.m-text-sm { font-size: 11px; }
+
+.m-arrow {
+  width: 70px;
+  height: 26px;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.m-formula {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Fraunces', serif;
+  color: var(--ink-soft);
+}
+
+.m-symbol {
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--terra);
+}
+
+.m-symbol-2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.m-arrow-inline {
+  font-size: 16px;
+  color: var(--terra);
+}
+
+.m-formula-2 {
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.m-note-1 { margin-top: 28px; }
+.m-note-2 { margin-top: 18px; margin-left: 12px; }
+.m-note-3 { margin-left: 18px; }
+
+.m-section { margin-left: 8px; }
+
+/* Rotaciones leves para sensación "anotado a mano" */
+.margin-left  .m-thermo  { transform: rotate(-4deg); }
+.margin-left  .m-drop    { transform: rotate(6deg); margin-left: 16px; }
+.margin-left  .m-note-1  { transform: rotate(-2deg); }
+.margin-right .m-cycle   { transform: rotate(7deg); margin-left: 6px; }
+.margin-right .m-note-2  { transform: rotate(3deg); }
+.margin-right .m-section { transform: rotate(-3deg); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Tablet y abajo — ocultar márgenes decorativos */
+@media (max-width: 1199px) {
+  .page {
+    grid-template-columns: 1fr;
+    padding: 32px 16px 56px;
+  }
+  .margin { display: none; }
+  .paper { grid-column: 1; }
+}
+
+/* Tablet medio */
+@media (max-width: 768px) {
+  .paper {
+    padding: 36px 24px 32px;
+    border-radius: 4px;
+  }
+  .masthead { margin-bottom: 28px; }
+  .masthead h1 { letter-spacing: -0.02em; }
+  .scene-frame { padding: 10px; margin-bottom: 28px; }
+  .stage-indicator { margin-bottom: 26px; }
+  .stage-indicator li { padding: 12px 6px 10px; }
+  .stage-indicator .num { font-size: 11px; }
+  .info { margin-bottom: 24px; }
+  .controls { margin-bottom: 28px; }
+}
+
+/* Mobile */
+@media (max-width: 520px) {
+  body { font-size: 15px; }
+  .page { padding: 20px 10px 40px; }
+  .paper {
+    padding: 28px 18px 24px;
+    border-width: 1px;
+  }
+  .paper::before { inset: 8px; }
+  .masthead-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .masthead h1 { font-size: clamp(40px, 11vw, 56px); line-height: 0.95; }
+
+  .stage-indicator {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .stage-indicator .name {
+    font-size: 11px;
+    line-height: 1.15;
+  }
+  .stage-indicator .num { font-size: 10px; }
+  .stage-indicator li { padding: 10px 4px 8px; }
+
+  .scene-frame { padding: 6px; }
+  .info { padding: 22px 18px; }
+  .info-header { flex-wrap: wrap; gap: 8px; }
+  .stage-title { font-size: 30px; }
+  .stage-desc  { font-size: 16px; }
+
+  .controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .kbd-hint { order: 3; width: 100%; text-align: center; margin-top: 4px; }
+  .btn { flex: 1 1 140px; justify-content: center; padding: 12px 16px; }
+
+  .paper-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.2s !important;
+  }
+  .sun-rays { animation: none !important; }
+}
+
+/* Animación de entrada (al cargar) */
+.masthead       { animation: fade-up 0.7s 0.05s ease both; }
+.stage-indicator{ animation: fade-up 0.7s 0.15s ease both; }
+.scene-frame    { animation: fade-up 0.7s 0.25s ease both; }
+.info           { animation: fade-up 0.7s 0.35s ease both; }
+.controls       { animation: fade-up 0.7s 0.45s ease both; }
+.paper-footer   { animation: fade-up 0.7s 0.55s ease both; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Transición suave del panel al cambiar etapa */
+.info.is-switching .stage-title,
+.info.is-switching .stage-desc,
+.info.is-switching .stage-key,
+.info.is-switching .stage-glyph {
+  animation: stage-swap 0.5s ease;
+}
+
+@keyframes stage-swap {
+  0%   { opacity: 0.2; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
