@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Identifica el sonido</title>
+  <meta name="description" content="Identifica el sonido. Instrumentos y naturaleza, sintetizados en vivo con Web Audio API." />
+  <script defer src="https://analytics.lu1s9.dev/script.js" data-website-id="b43d0a09-e1eb-4a2e-ba0b-0c2025f98c3b"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="phase-idle">
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <a class="home-link" href="../../" aria-label="Volver al catálogo">←</a>
+
+  <div class="vignette" aria-hidden="true"></div>
+
+  <main class="stage">
+
+    <!-- IDLE -->
+    <section id="idle" class="idle">
+      <header class="hero">
+        <span class="eyebrow">música · ciencias naturales</span>
+        <h1 class="hero-title">Identifica<br/><em>el sonido</em></h1>
+        <p class="hero-lead">
+          Escucha el sonido y elige. Diez rondas. Instrumentos y naturaleza, todos sintetizados en vivo.
+        </p>
+      </header>
+
+      <div class="categories">
+        <div class="cat">
+          <span class="cat-num">06</span>
+          <span class="cat-label">Instrumentos</span>
+          <ul>
+            <li>Piano</li><li>Flauta</li><li>Tambor</li>
+            <li>Guitarra</li><li>Violín</li><li>Trompeta</li>
+          </ul>
+        </div>
+        <div class="cat-divider" aria-hidden="true"></div>
+        <div class="cat">
+          <span class="cat-num">06</span>
+          <span class="cat-label">Naturaleza</span>
+          <ul>
+            <li>Lluvia</li><li>Viento</li><li>Trueno</li>
+            <li>Olas</li><li>Fuego</li><li>Pájaro</li>
+          </ul>
+        </div>
+      </div>
+
+      <button id="start-btn" class="primary" type="button">
+        <span class="primary-label">Empezar a escuchar</span>
+        <span class="primary-glyph" aria-hidden="true">▶</span>
+      </button>
+
+      <p class="hint">Audífonos o altavoz decente recomendado.</p>
+    </section>
+
+    <!-- QUESTION -->
+    <section id="quiz" class="quiz">
+      <header class="quiz-head">
+        <div class="counter">
+          <span class="counter-current" id="q-current">01</span>
+          <span class="counter-divider">/</span>
+          <span class="counter-total" id="q-total">10</span>
+        </div>
+        <div class="score-display">
+          <span class="score-label">PTS</span>
+          <span class="score-value" id="score">0</span>
+        </div>
+      </header>
+
+      <div class="scope-wrap">
+        <canvas id="scope" class="scope"></canvas>
+        <div class="scope-frame" aria-hidden="true">
+          <span class="scope-corner tl"></span>
+          <span class="scope-corner tr"></span>
+          <span class="scope-corner bl"></span>
+          <span class="scope-corner br"></span>
+        </div>
+        <div class="scope-meta">
+          <span class="meta-label">SEÑAL · EN VIVO</span>
+          <span class="meta-dot" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <div class="play-area">
+        <button id="play-btn" class="play-btn" type="button" aria-label="Reproducir sonido">
+          <svg viewBox="0 0 64 64" class="play-icon">
+            <circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <polygon points="26,20 26,44 46,32" fill="currentColor" class="play-tri" />
+            <g class="play-pause" opacity="0">
+              <rect x="24" y="20" width="6" height="24" fill="currentColor" />
+              <rect x="34" y="20" width="6" height="24" fill="currentColor" />
+            </g>
+          </svg>
+        </button>
+        <p class="play-hint" id="play-hint">Toca para escuchar de nuevo</p>
+      </div>
+
+      <p class="question-prompt">¿Qué se escucha?</p>
+
+      <div class="options" id="options" role="listbox">
+        <!-- 4 options injected by JS -->
+      </div>
+
+      <div class="reveal" id="reveal" aria-live="polite">
+        <span class="reveal-label" id="reveal-label">—</span>
+        <span class="reveal-name" id="reveal-name">—</span>
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <section id="result" class="result">
+      <span class="eyebrow result-eyebrow">Ronda terminada</span>
+      <h2 class="result-title" id="result-title">—</h2>
+
+      <div class="result-score-block">
+        <span class="result-score-label">PUNTAJE FINAL</span>
+        <span class="result-score-value" id="final-score">0</span>
+      </div>
+
+      <ul class="result-stats">
+        <li>
+          <span class="stat-num" id="final-correct">0</span>
+          <span class="stat-label">correctas</span>
+        </li>
+        <li>
+          <span class="stat-num" id="final-wrong">0</span>
+          <span class="stat-label">incorrectas</span>
+        </li>
+        <li>
+          <span class="stat-num" id="final-streak">0</span>
+          <span class="stat-label">mejor racha</span>
+        </li>
+      </ul>
+
+      <div class="result-actions">
+        <button id="restart-btn" class="primary" type="button">
+          <span class="primary-label">Otra ronda</span>
+          <span class="primary-glyph" aria-hidden="true">↻</span>
+        </button>
+        <button id="quit-btn" class="secondary" type="button">Volver al inicio</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
