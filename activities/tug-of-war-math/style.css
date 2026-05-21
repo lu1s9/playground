@@ -1,21 +1,31 @@
-/* =========================================================
-   Tug of War: Math
-   ========================================================= */
+/* ============================================================
+   TUG OF WAR: MATH — Constructivist / Field Day Almanac
+   Direction: bold poster ink, cream paper, hand-set type,
+   mustard CTA, sharp-cornered everything.
+   ============================================================ */
 
 :root {
-  --bg: #f4f6f8;
-  --surface: #ffffff;
-  --line: #d8e0ea;
-  --text: #1f2937;
-  --muted: #6b7280;
-  --azul: #3b82f6;
-  --azul-deep: #2563eb;
-  --azul-soft: #dbeafe;
-  --rojo: #ef4444;
-  --rojo-deep: #dc2626;
-  --rojo-soft: #fee2e2;
-  --knot: #fbbf24;
-  --knot-deep: #d97706;
+  --paper: #f0e7d6;
+  --paper-deep: #e6dac1;
+  --paper-shadow: #d9cdb6;
+  --ink: #1a1410;
+  --ink-soft: #3a2e25;
+  --olive: #6b6135;
+
+  --azul: #1d3a8a;
+  --azul-dark: #0f1f5e;
+  --azul-tint: rgba(29, 58, 138, 0.1);
+
+  --rojo: #c92020;
+  --rojo-dark: #8a0e0e;
+  --rojo-tint: rgba(201, 32, 32, 0.1);
+
+  --mustard: #d4a017;
+  --mustard-bright: #e8b624;
+  --mustard-dark: #9c7510;
+
+  --font-display: "Archivo Black", "Arial Black", "Helvetica Neue", sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 * {
@@ -29,13 +39,15 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  color: var(--text);
-  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--paper);
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
   overscroll-behavior: none;
+  letter-spacing: 0.01em;
 }
 
 button {
@@ -47,40 +59,64 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ---------------------------------------------------------
-   Home link (volver al catálogo)
-   --------------------------------------------------------- */
-.home-link {
+/* ------------------------------------------------------------
+   Paper grain — full-page texture overlay
+   ------------------------------------------------------------ */
+.grain {
   position: fixed;
-  top: 16px;
-  left: 16px;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
+  opacity: 0.16;
+  mix-blend-mode: multiply;
+}
+
+/* ------------------------------------------------------------
+   Home + quit corner buttons
+   ------------------------------------------------------------ */
+.home-link,
+.quit {
+  position: fixed;
+  top: 20px;
   z-index: 50;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
-  background: var(--surface);
-  border: 2px solid var(--line);
-  border-radius: 12px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
   text-decoration: none;
-  color: var(--muted);
-  font-size: 20px;
-  font-weight: 700;
-  transition: transform 0.1s ease, border-color 0.15s ease;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 18px;
+  box-shadow: 4px 4px 0 0 var(--ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.home-link:hover {
-  border-color: var(--text);
-  color: var(--text);
+.home-link {
+  left: 20px;
 }
 
-.home-link:active {
-  transform: scale(0.94);
+.quit {
+  right: 20px;
 }
 
-/* ---------------------------------------------------------
+.home-link:hover,
+.quit:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 var(--ink);
+}
+
+.home-link:active,
+.quit:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--ink);
+}
+
+/* ------------------------------------------------------------
    Phase visibility
-   --------------------------------------------------------- */
+   ------------------------------------------------------------ */
 .setup,
 .game,
 .overlay {
@@ -94,7 +130,7 @@ button {
 .phase-setup .setup {
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: 28px;
   overflow-y: auto;
 }
 
@@ -107,63 +143,155 @@ button {
 
 .overlay {
   display: none;
-  background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(26, 20, 16, 0.5);
   place-items: center;
   padding: 24px;
   z-index: 100;
+  overflow: hidden;
 }
 .phase-over .overlay {
   display: grid;
 }
 
-/* ---------------------------------------------------------
-   Setup screen
-   --------------------------------------------------------- */
+/* ============================================================
+   SETUP — hero + numbered pickers + mustard CTA
+   ============================================================ */
 .setup-inner {
-  max-width: 720px;
+  max-width: 780px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  padding: 40px 0;
+  gap: 40px;
+  padding: 32px 0;
 }
 
-.setup h1 {
-  font-size: clamp(36px, 6vw, 56px);
-  font-weight: 900;
-  letter-spacing: -2px;
+/* Staggered entrance */
+.setup-inner > * {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: rise 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+}
+.setup-inner > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.setup-inner > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.setup-inner > *:nth-child(3) {
+  animation-delay: 0.32s;
+}
+.setup-inner > *:nth-child(4) {
+  animation-delay: 0.44s;
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Hero --- */
+.hero {
   text-align: center;
 }
 
-.setup h1 .accent {
-  background: linear-gradient(90deg, var(--azul) 0%, var(--rojo) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.hero-overline {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  font-weight: 500;
+  color: var(--ink-soft);
 }
 
-.lead {
-  text-align: center;
-  color: var(--muted);
-  font-size: 16px;
-  line-height: 1.5;
+.overline-line {
+  flex: 1;
+  height: 2px;
+  background: var(--ink);
 }
 
-.picker h2 {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--muted);
-  letter-spacing: 1.5px;
+.overline-text {
+  white-space: nowrap;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 13vw, 144px);
+  line-height: 0.85;
+  letter-spacing: -0.045em;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.06em;
+  flex-wrap: wrap;
   text-transform: uppercase;
-  margin-bottom: 10px;
-  margin-left: 4px;
+}
+
+.hero-tug {
+  color: var(--azul);
+}
+
+.hero-of {
+  color: var(--olive);
+  font-size: 0.42em;
+  transform: translateY(-0.4em);
+  letter-spacing: 0;
+}
+
+.hero-war {
+  color: var(--rojo);
+}
+
+.hero-sub {
+  margin-top: 18px;
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 1.5vw, 13px);
+  letter-spacing: 0.4em;
+  font-weight: 500;
+  color: var(--olive);
+}
+
+/* --- Pickers --- */
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.picker-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+.picker-label span {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 5px 10px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+}
+
+.picker-label::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: var(--ink);
 }
 
 .opts {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .opts-mode {
@@ -174,95 +302,178 @@ button {
   grid-template-columns: repeat(3, 1fr);
 }
 
+/* Option cards */
 .opt {
-  background: var(--surface);
-  border: 2px solid var(--line);
-  border-radius: 16px;
-  padding: 18px 16px;
+  position: relative;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  padding: 18px 20px;
   text-align: left;
-  transition: border-color 0.15s ease, transform 0.1s ease,
-    box-shadow 0.15s ease;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-height: 80px;
+  min-height: 96px;
+  font-family: var(--font-mono);
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    background 0.12s ease;
+  box-shadow: 5px 5px 0 0 var(--ink);
+  overflow: hidden;
 }
 
 .opt:hover {
-  border-color: var(--text);
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 0 var(--ink);
 }
 
 .opt:active {
-  transform: scale(0.98);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--ink);
 }
 
 .opt.active {
-  border-color: var(--text);
-  background: var(--text);
-  color: var(--surface);
-  box-shadow: 0 6px 0 -2px rgba(31, 41, 55, 0.3);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Diagonal stripe accent on active opts */
+.opt.active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 50%,
+    var(--mustard) 50%,
+    var(--mustard) 60%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.opt-num {
+  position: absolute;
+  top: -16px;
+  right: 8px;
+  font-family: var(--font-display);
+  font-size: 110px;
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.opt.active .opt-num {
+  color: var(--paper);
+  opacity: 0.14;
 }
 
 .opt-title {
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
+  font-family: var(--font-display);
+  font-size: clamp(15px, 2.1vw, 20px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
 }
 
 .opt-desc {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.4;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  position: relative;
+  z-index: 1;
 }
 
 .opt.active .opt-desc {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(240, 231, 214, 0.72);
 }
 
+.opts-difficulty .opt {
+  min-height: 80px;
+}
+
+.opts-difficulty .opt-desc {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+/* --- Primary CTA --- */
 .primary {
-  background: var(--text);
-  color: var(--surface);
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  padding: 16px 32px;
-  border-radius: 14px;
-  box-shadow: 0 4px 0 0 #0f172a;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  position: relative;
   align-self: center;
-  min-width: 220px;
+  background: var(--mustard);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.14em;
+  padding: 18px 44px;
+  text-transform: uppercase;
+  box-shadow: 6px 6px 0 0 var(--ink);
+  transition: transform 0.1s ease, box-shadow 0.1s ease,
+    background 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 280px;
+  justify-content: center;
+}
+
+.primary:hover {
+  background: var(--mustard-bright);
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 0 var(--ink);
 }
 
 .primary:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 0 #0f172a;
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 0 var(--ink);
+}
+
+.primary-arrow {
+  display: inline-block;
+  font-size: 24px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.primary:hover .primary-arrow {
+  transform: translateX(6px);
 }
 
 .secondary {
   background: transparent;
-  color: var(--muted);
-  font-size: 14px;
-  font-weight: 700;
-  padding: 12px 24px;
-  border-radius: 10px;
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  padding: 10px 22px;
+  text-transform: uppercase;
+  border: 2px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
 
 .secondary:hover {
-  color: var(--text);
+  color: var(--ink);
+  border-color: var(--ink);
 }
 
-/* ---------------------------------------------------------
-   Game layouts
-   --------------------------------------------------------- */
+/* ============================================================
+   GAME — layouts
+   ============================================================ */
 .game {
-  background: var(--bg);
+  background: var(--paper);
+  padding: 18px;
+  gap: 14px;
 }
 
-/* Mode 1p — three columns */
 .phase-playing.mode-1p .game {
-  grid-template-columns: 1fr 1.4fr 1fr;
-  gap: 16px;
-  padding: 16px;
+  grid-template-columns: 1fr 1.3fr 1fr;
 }
 
 .phase-playing.mode-1p .team-1 {
@@ -275,13 +486,48 @@ button {
   grid-column: 3;
 }
 
-/* Mode 2p — three rows, team-1 rotated 180° */
 .phase-playing.mode-2p .game {
   /* La cuerda no necesita tanto vertical — los teams sí (keypad de 4 filas).
      minmax(96px, 0.5fr) le da a la cuerda un piso visible pero no le roba aire al keypad. */
   grid-template-rows: 1fr minmax(96px, 0.5fr) 1fr;
-  gap: 12px;
+}
+
+/* Compresión específica de mode 2p: header/question/input más chicos para
+   dejarle más espacio al keypad (que es el que tocan). */
+.phase-playing.mode-2p .team {
   padding: 12px;
+  gap: 8px;
+}
+
+.phase-playing.mode-2p .team-header {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.phase-playing.mode-2p .question-wrap {
+  padding: 10px 30px;
+}
+
+.phase-playing.mode-2p .question {
+  font-size: clamp(22px, 3.4vw, 32px);
+}
+
+.phase-playing.mode-2p .input {
+  padding: 8px 14px;
+  min-height: 44px;
+  font-size: clamp(20px, 2.6vw, 26px);
+}
+
+/* Y lo más importante: que las filas del keypad puedan adaptarse al espacio real.
+   En mode 2p el espacio es limitado — sin minmax(36px, ...) las filas se ajustan
+   sin desbordar el contenedor. */
+.phase-playing.mode-2p .keypad {
+  grid-template-rows: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.phase-playing.mode-2p .keypad button {
+  font-size: clamp(16px, 2.3vw, 22px);
 }
 
 .phase-playing.mode-2p .team-1 {
@@ -295,73 +541,58 @@ button {
   grid-row: 3;
 }
 
-/* Compresión específica de mode 2p: header/question/input más chicos para
-   dejarle más espacio al keypad (que es lo que se toca). */
-.phase-playing.mode-2p .team {
-  padding: 12px;
-  gap: 8px;
-}
-
-.phase-playing.mode-2p .team-header {
-  padding: 5px 10px;
-  font-size: 12px;
-}
-
-.phase-playing.mode-2p .question {
-  padding: 10px;
-  font-size: clamp(22px, 3.4vw, 32px);
-}
-
-.phase-playing.mode-2p .input {
-  padding: 8px;
-  min-height: 44px;
-  font-size: clamp(20px, 2.6vw, 26px);
-}
-
-/* Filas del keypad flexibles: sin minmax(36px,...) las filas se ajustan al
-   espacio real disponible y no desbordan el contenedor en pantallas justas. */
-.phase-playing.mode-2p .keypad {
-  grid-template-rows: repeat(4, 1fr);
-  gap: 6px;
-}
-
-.phase-playing.mode-2p .keypad button {
-  font-size: clamp(16px, 2.3vw, 22px);
-}
-
-/* ---------------------------------------------------------
-   Team panels
-   --------------------------------------------------------- */
+/* ------------------------------------------------------------
+   Team panel
+   ------------------------------------------------------------ */
 .team {
-  background: var(--surface);
-  border: 2px solid var(--line);
-  border-radius: 20px;
+  position: relative;
+  background: var(--paper);
+  border: 3px solid var(--ink);
   padding: 16px;
   display: grid;
   grid-template-rows: auto auto auto minmax(0, 1fr);
-  gap: 10px;
+  gap: 12px;
   min-height: 0;
   overflow: hidden;
+  box-shadow: 4px 4px 0 0 var(--ink);
 }
 
 .team-1 {
-  border-color: var(--azul);
+  background: linear-gradient(180deg, var(--azul-tint) 0%, var(--paper) 65%);
 }
+
 .team-2 {
-  border-color: var(--rojo);
+  background: linear-gradient(180deg, var(--rojo-tint) 0%, var(--paper) 65%);
+}
+
+.team-mark {
+  position: absolute;
+  top: -24px;
+  right: 12px;
+  font-family: var(--font-display);
+  font-size: 240px;
+  line-height: 0.8;
+  color: var(--ink);
+  opacity: 0.05;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
 }
 
 .team-header {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 1px;
+  gap: 12px;
+  padding: 9px 14px;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-display);
+  letter-spacing: 0.22em;
+  font-size: 13px;
   text-transform: uppercase;
-  padding: 6px 12px;
-  border-radius: 10px;
-  color: white;
+  z-index: 1;
 }
 
 .team-1 .team-header {
@@ -371,262 +602,419 @@ button {
   background: var(--rojo);
 }
 
-.question {
+.team-flag {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: var(--mustard);
+  border: 2px solid var(--paper);
+}
+
+.team-name {
+  flex: 1;
+}
+
+/* Question display — bracketed by ornamental × marks */
+.question-wrap {
+  position: relative;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 16px 36px;
   text-align: center;
-  font-size: clamp(28px, 4vw, 40px);
-  font-weight: 900;
-  letter-spacing: -1px;
-  padding: 14px;
-  border-radius: 14px;
+  z-index: 1;
+}
+
+.question-wrap::before,
+.question-wrap::after {
+  content: "·";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--olive);
+}
+
+.question-wrap::before {
+  left: 10px;
+}
+
+.question-wrap::after {
+  right: 10px;
+}
+
+.question {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.6vw, 40px);
+  letter-spacing: -0.01em;
+  line-height: 1;
 }
 
 .team-1 .question {
-  background: var(--azul-soft);
-  color: var(--azul-deep);
+  color: var(--azul-dark);
 }
 .team-2 .question {
-  background: var(--rojo-soft);
-  color: var(--rojo-deep);
+  color: var(--rojo-dark);
 }
 
+/* Input — dashed border, mono cursor */
 .input {
+  position: relative;
+  background: var(--paper);
+  border: 2px dashed var(--ink);
+  padding: 12px 16px;
   text-align: center;
-  font-size: clamp(24px, 3vw, 32px);
-  font-weight: 800;
-  background: var(--bg);
-  border: 2px solid var(--line);
-  border-radius: 12px;
-  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: clamp(22px, 2.8vw, 30px);
+  font-weight: 500;
   min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s ease, border-color 0.15s ease,
-    transform 0.15s ease;
+  z-index: 1;
 }
 
 .input.flash-correct {
-  background: #d1fae5;
-  border-color: #10b981;
-  animation: pulse-good 0.4s ease-out;
+  background: var(--mustard);
+  border-color: var(--ink);
+  border-style: solid;
+  animation: stamp-good 0.45s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .input.flash-wrong {
-  background: #fee2e2;
-  border-color: var(--rojo);
-  animation: shake-bad 0.4s ease-out;
+  background: var(--rojo);
+  color: var(--paper);
+  border-color: var(--ink);
+  border-style: solid;
+  animation: stamp-bad 0.45s ease-out;
 }
 
-@keyframes pulse-good {
+@keyframes stamp-good {
   0% {
-    transform: scale(1);
+    transform: scale(0.94) rotate(-1.5deg);
   }
-  50% {
-    transform: scale(1.06);
+  45% {
+    transform: scale(1.06) rotate(1deg);
   }
   100% {
-    transform: scale(1);
+    transform: scale(1) rotate(0);
   }
 }
 
-@keyframes shake-bad {
+@keyframes stamp-bad {
   0%,
   100% {
     transform: translateX(0);
   }
-  25% {
-    transform: translateX(-6px);
+  20% {
+    transform: translateX(-8px) rotate(-1deg);
   }
-  75% {
-    transform: translateX(6px);
+  40% {
+    transform: translateX(8px) rotate(1deg);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
   }
 }
 
+/* Keypad */
 .keypad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(4, minmax(36px, 1fr));
   gap: 8px;
   min-height: 0;
+  z-index: 1;
 }
 
 .keypad button {
-  background: var(--bg);
-  border: 2px solid var(--line);
-  border-radius: 12px;
-  font-size: clamp(18px, 2.4vw, 24px);
-  font-weight: 700;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.6vw, 24px);
   display: grid;
   place-items: center;
-  transition: transform 0.08s ease, background 0.15s ease;
+  transition: transform 0.08s ease, background 0.12s ease,
+    box-shadow 0.08s ease;
+  box-shadow: 3px 3px 0 0 var(--ink);
 }
 
 .keypad button:hover {
-  background: #eaf0f6;
+  background: var(--paper-deep);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 0 var(--ink);
 }
 
 .keypad button:active {
-  transform: scale(0.94);
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--ink);
 }
 
 .keypad .key-clear {
-  background: var(--bg);
-  color: var(--muted);
-  font-size: clamp(20px, 2.6vw, 26px);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: clamp(20px, 2.8vw, 26px);
 }
 
 .keypad .key-submit {
-  background: #10b981;
-  color: white;
-  border-color: #047857;
-  font-weight: 900;
-  font-size: clamp(22px, 2.8vw, 28px);
-  box-shadow: 0 3px 0 0 #047857;
+  background: var(--mustard);
+  color: var(--ink);
+  font-size: clamp(24px, 3.2vw, 32px);
 }
 
 .keypad .key-submit:hover {
-  background: #059669;
+  background: var(--mustard-bright);
 }
 
-.keypad .key-submit:active {
-  transform: translateY(2px) scale(0.96);
-  box-shadow: 0 1px 0 0 #047857;
-}
-
-/* ---------------------------------------------------------
-   Rope scene
-   --------------------------------------------------------- */
+/* ============================================================
+   ROPE SCENE
+   ============================================================ */
 .rope-scene {
-  background: var(--surface);
-  border: 2px solid var(--line);
-  border-radius: 20px;
-  padding: 16px;
   position: relative;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 0 var(--ink);
+  padding: 20px;
   display: flex;
   flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
 }
 
-.rope {
+.rope-frame {
   flex: 1;
   position: relative;
-  min-height: 80px;
+  min-height: 110px;
 }
 
+/* End zones — tinted territories */
+.rope-zone {
+  position: absolute;
+  z-index: 0;
+}
+
+.mode-1p .rope-zone-1 {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 22%;
+  background: linear-gradient(90deg, var(--azul-tint), transparent);
+}
+
+.mode-1p .rope-zone-2 {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 22%;
+  background: linear-gradient(270deg, var(--rojo-tint), transparent);
+}
+
+.mode-2p .rope-zone-1 {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 22%;
+  background: linear-gradient(180deg, var(--azul-tint), transparent);
+}
+
+.mode-2p .rope-zone-2 {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 22%;
+  background: linear-gradient(0deg, var(--rojo-tint), transparent);
+}
+
+/* The rope itself — a heavy ink line */
 .rope-line {
   position: absolute;
-  background: linear-gradient(90deg, var(--azul) 0%, #94a3b8 50%, var(--rojo) 100%);
-  border-radius: 6px;
+  background: var(--ink);
+  z-index: 1;
+  border-radius: 2px;
 }
 
 .mode-1p .rope-line {
-  left: 6%;
-  right: 6%;
   top: 50%;
-  height: 10px;
+  left: 4%;
+  right: 4%;
+  height: 7px;
   transform: translateY(-50%);
 }
 
 .mode-2p .rope-line {
-  background: linear-gradient(180deg, var(--azul) 0%, #94a3b8 50%, var(--rojo) 100%);
-  top: 6%;
-  bottom: 6%;
   left: 50%;
-  width: 10px;
+  top: 4%;
+  bottom: 4%;
+  width: 7px;
   transform: translateX(-50%);
 }
 
+/* Tick marks — measurement scale along the rope */
+.rope-ticks {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  pointer-events: none;
+}
+
+.mode-1p .rope-ticks {
+  top: 50%;
+  left: 4%;
+  right: 4%;
+  height: 20px;
+  transform: translateY(-50%);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mode-2p .rope-ticks {
+  flex-direction: column;
+  left: 50%;
+  top: 4%;
+  bottom: 4%;
+  width: 20px;
+  transform: translateX(-50%);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rope-ticks span {
+  display: block;
+  background: var(--ink);
+}
+
+.mode-1p .rope-ticks span {
+  width: 2px;
+  height: 16px;
+}
+
+.mode-2p .rope-ticks span {
+  width: 16px;
+  height: 2px;
+}
+
+/* Center line — mustard marker showing zero */
 .rope-center {
   position: absolute;
-  background: rgba(31, 41, 55, 0.25);
-  border-radius: 2px;
+  z-index: 2;
+  background: var(--mustard);
+  box-shadow: 0 0 0 1.5px var(--ink);
 }
 
 .mode-1p .rope-center {
   left: 50%;
-  top: 25%;
-  bottom: 25%;
-  width: 3px;
+  top: 18%;
+  bottom: 18%;
+  width: 4px;
   transform: translateX(-50%);
 }
 
 .mode-2p .rope-center {
   top: 50%;
-  left: 25%;
-  right: 25%;
-  height: 3px;
+  left: 18%;
+  right: 18%;
+  height: 4px;
   transform: translateY(-50%);
 }
 
+/* Marker — wooden spool / knot */
 .rope-marker {
   --pos: 50%;
   position: absolute;
-  width: 56px;
-  height: 56px;
-  background: var(--knot);
-  border: 4px solid var(--knot-deep);
-  border-radius: 50%;
-  z-index: 2;
-  box-shadow: 0 0 28px 6px rgba(251, 191, 36, 0.4);
+  width: 64px;
+  height: 64px;
+  z-index: 3;
 }
 
 .mode-1p .rope-marker {
   left: var(--pos);
   top: 50%;
   transform: translate(-50%, -50%);
-  transition: left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: left 0.4s cubic-bezier(0.2, 1, 0.32, 1);
 }
 
 .mode-2p .rope-marker {
   top: var(--pos);
   left: 50%;
   transform: translate(-50%, -50%);
-  transition: top 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: top 0.4s cubic-bezier(0.2, 1, 0.32, 1);
+}
+
+.marker-ring {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  border-radius: 50%;
+  box-shadow: 5px 5px 0 0 var(--mustard);
 }
 
 .marker-knot {
   position: absolute;
-  inset: 8px;
-  background: radial-gradient(
-    circle at 35% 30%,
-    #fef3c7 0%,
-    var(--knot) 60%,
-    var(--knot-deep) 100%
-  );
+  inset: 10px;
+  background: var(--paper);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.marker-knot::after {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background: var(--ink);
   border-radius: 50%;
 }
 
-.rope-marker.tug {
-  animation: tug 0.45s ease-out;
+.rope-marker.tug .marker-ring {
+  animation: tug-ring 0.45s ease-out;
 }
 
-@keyframes tug {
+@keyframes tug-ring {
   0% {
-    box-shadow: 0 0 28px 6px rgba(251, 191, 36, 0.4);
+    box-shadow: 5px 5px 0 0 var(--mustard);
   }
   40% {
-    box-shadow: 0 0 48px 14px rgba(251, 191, 36, 0.7);
+    box-shadow: 8px 8px 0 0 var(--mustard), 0 0 0 4px var(--mustard);
   }
   100% {
-    box-shadow: 0 0 28px 6px rgba(251, 191, 36, 0.4);
+    box-shadow: 5px 5px 0 0 var(--mustard);
   }
 }
 
+/* Labels */
 .rope-labels {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 0 4px;
+  gap: 12px;
+  font-family: var(--font-display);
   font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.32em;
+}
+
+.label-divider {
+  flex: 1;
+  height: 2px;
+  background: var(--ink);
 }
 
 .mode-2p .rope-labels {
   flex-direction: column-reverse;
   position: absolute;
-  inset: 16px 16px 16px auto;
-  width: 24px;
+  inset: 18px 14px 18px auto;
+  width: auto;
+  height: calc(100% - 36px);
   align-items: center;
   justify-content: space-between;
+}
+
+.mode-2p .label-divider {
+  width: 2px;
+  height: auto;
+  flex: 1;
 }
 
 .label-1 {
@@ -636,72 +1024,108 @@ button {
   color: var(--rojo);
 }
 
-/* ---------------------------------------------------------
-   Quit button (during game)
-   --------------------------------------------------------- */
-.quit {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 50;
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  background: var(--surface);
-  border: 2px solid var(--line);
-  border-radius: 12px;
-  color: var(--muted);
-  font-size: 18px;
-  font-weight: 700;
-  transition: border-color 0.15s ease, transform 0.1s ease;
+/* ============================================================
+   GAME OVER overlay
+   ============================================================ */
+.overlay-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    transparent 28%,
+    var(--azul) 28%,
+    var(--azul) 40%,
+    transparent 40%
+  );
+  opacity: 0.6;
+  animation: sweep-in 0.7s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
-.quit:active {
-  transform: scale(0.94);
+.phase-over .overlay:has(#winner-title.win-2) .overlay-sweep {
+  background: linear-gradient(
+    135deg,
+    transparent 28%,
+    var(--rojo) 28%,
+    var(--rojo) 40%,
+    transparent 40%
+  );
 }
 
-/* ---------------------------------------------------------
-   Game over card
-   --------------------------------------------------------- */
+@keyframes sweep-in {
+  0% {
+    transform: translate(-40%, -40%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.6;
+  }
+}
+
 .card {
-  background: var(--surface);
-  border-radius: 24px;
+  position: relative;
+  background: var(--paper);
+  border: 4px solid var(--ink);
   padding: 40px 44px;
   text-align: center;
-  box-shadow: 0 30px 60px -20px rgba(15, 23, 42, 0.35);
-  max-width: 420px;
+  max-width: 460px;
   width: 100%;
+  box-shadow: 10px 10px 0 0 var(--ink);
+  animation: card-in 0.55s cubic-bezier(0.2, 1, 0.3, 1) 0.22s both;
 }
 
-.card h1 {
-  font-size: 36px;
-  font-weight: 900;
-  letter-spacing: -1px;
+@keyframes card-in {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card-overline {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--olive);
   margin-bottom: 10px;
 }
 
+.card h1 {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 6.5vw, 60px);
+  letter-spacing: -0.025em;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+
 .card h1.win-1 {
-  color: var(--azul-deep);
+  color: var(--azul);
 }
 .card h1.win-2 {
-  color: var(--rojo-deep);
+  color: var(--rojo);
 }
 
 .card p {
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.5;
-  margin-bottom: 24px;
+  font-family: var(--font-mono);
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 28px;
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
 }
 
 .actions .primary {
-  min-width: 200px;
+  min-width: 240px;
 }

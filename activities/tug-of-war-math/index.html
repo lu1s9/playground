@@ -4,62 +4,91 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Tug of War: Math</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="phase-setup">
 
+  <div class="grain" aria-hidden="true"></div>
+
   <a class="home-link" href="../../" aria-label="Volver al catálogo">←</a>
 
-  <!-- Setup screen -->
+  <!-- SETUP -->
   <section id="setup" class="setup">
     <div class="setup-inner">
-      <h1>Tug of War: <span class="accent">Math</span></h1>
-      <p class="lead">Cuatro operaciones, una soga, un solo ganador.</p>
+
+      <header class="hero">
+        <div class="hero-overline">
+          <span class="overline-line"></span>
+          <span class="overline-text">FIELD DAY · MATH EDITION</span>
+          <span class="overline-line"></span>
+        </div>
+        <h1 class="hero-title">
+          <span class="hero-tug">TUG</span><span class="hero-of">OF</span><span class="hero-war">WAR</span>
+        </h1>
+        <p class="hero-sub">CUATRO OPERACIONES · UNA SOGA · UN GANADOR</p>
+      </header>
 
       <div class="picker">
-        <h2>Jugadores</h2>
+        <h2 class="picker-label"><span>01</span> Jugadores</h2>
         <div class="opts opts-mode">
           <button data-mode="1p" class="opt active" type="button">
-            <span class="opt-title">1 jugador</span>
-            <span class="opt-desc">Tú contra la CPU. Vista horizontal. Funciona en cualquier dispositivo.</span>
+            <span class="opt-num">1</span>
+            <span class="opt-title">Un jugador</span>
+            <span class="opt-desc">Tú contra la CPU. Pantalla izquierda → derecha. Funciona en cualquier dispositivo.</span>
           </button>
           <button data-mode="2p" class="opt" type="button">
-            <span class="opt-title">2 jugadores</span>
-            <span class="opt-desc">Mismo dispositivo, uno frente al otro. Optimizado para tablet. Solo táctil.</span>
+            <span class="opt-num">2</span>
+            <span class="opt-title">Dos jugadores</span>
+            <span class="opt-desc">Mismo dispositivo, uno frente al otro. Optimizado para tablet táctil.</span>
           </button>
         </div>
       </div>
 
       <div class="picker">
-        <h2>Dificultad</h2>
+        <h2 class="picker-label"><span>02</span> Dificultad</h2>
         <div class="opts opts-difficulty">
           <button data-difficulty="easy" class="opt" type="button">
             <span class="opt-title">Fácil</span>
-            <span class="opt-desc">Suma y resta · 1 a 10</span>
+            <span class="opt-desc">+ − · 1–10</span>
           </button>
           <button data-difficulty="medium" class="opt active" type="button">
             <span class="opt-title">Medio</span>
-            <span class="opt-desc">4 operaciones · 1 a 20</span>
+            <span class="opt-desc">+ − × ÷ · 1–20</span>
           </button>
           <button data-difficulty="hard" class="opt" type="button">
             <span class="opt-title">Difícil</span>
-            <span class="opt-desc">4 operaciones · 1 a 50</span>
+            <span class="opt-desc">+ − × ÷ · 1–50</span>
           </button>
         </div>
       </div>
 
-      <button id="start-btn" class="primary" type="button">Empezar</button>
+      <button id="start-btn" class="primary" type="button">
+        <span class="primary-text">Empezar</span>
+        <span class="primary-arrow" aria-hidden="true">→</span>
+      </button>
     </div>
   </section>
 
-  <!-- Game -->
+  <!-- GAME -->
   <section id="game" class="game">
 
-    <div class="team team-1" data-team="1">
-      <div class="team-header">
-        <span class="team-name">Equipo Azul</span>
+    <article class="team team-1" data-team="1">
+      <span class="team-mark" aria-hidden="true">01</span>
+      <header class="team-header">
+        <span class="team-flag" aria-hidden="true"></span>
+        <span class="team-name">Azul</span>
+      </header>
+      <div class="question-wrap">
+        <div class="question" id="q-1">?</div>
       </div>
-      <div class="question" id="q-1">?</div>
       <div class="input" id="i-1">0</div>
       <div class="keypad">
         <button data-key="1" type="button">1</button>
@@ -75,27 +104,39 @@
         <button data-key="0" type="button">0</button>
         <button data-key="submit" class="key-submit" type="button">=</button>
       </div>
-    </div>
+    </article>
 
     <div class="rope-scene">
-      <div class="rope">
-        <div class="rope-line"></div>
-        <div class="rope-center"></div>
+      <div class="rope-frame">
+        <div class="rope-zone rope-zone-1" aria-hidden="true"></div>
+        <div class="rope-zone rope-zone-2" aria-hidden="true"></div>
+        <div class="rope-line" aria-hidden="true"></div>
+        <div class="rope-ticks" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="rope-center" aria-hidden="true"></div>
         <div class="rope-marker" id="marker">
+          <div class="marker-ring"></div>
           <div class="marker-knot"></div>
         </div>
       </div>
       <div class="rope-labels">
         <span class="label label-1">AZUL</span>
+        <span class="label-divider" aria-hidden="true"></span>
         <span class="label label-2">ROJO</span>
       </div>
     </div>
 
-    <div class="team team-2" data-team="2">
-      <div class="team-header">
-        <span class="team-name">Equipo Rojo</span>
+    <article class="team team-2" data-team="2">
+      <span class="team-mark" aria-hidden="true">02</span>
+      <header class="team-header">
+        <span class="team-flag" aria-hidden="true"></span>
+        <span class="team-name">Rojo</span>
+      </header>
+      <div class="question-wrap">
+        <div class="question" id="q-2">?</div>
       </div>
-      <div class="question" id="q-2">?</div>
       <div class="input" id="i-2">0</div>
       <div class="keypad">
         <button data-key="1" type="button">1</button>
@@ -111,18 +152,23 @@
         <button data-key="0" type="button">0</button>
         <button data-key="submit" class="key-submit" type="button">=</button>
       </div>
-    </div>
+    </article>
 
-    <button id="quit-btn" class="quit" type="button" aria-label="Volver al menú">⏎</button>
+    <button id="quit-btn" class="quit" type="button" aria-label="Volver al menú">↩</button>
   </section>
 
-  <!-- Game over -->
+  <!-- GAME OVER -->
   <div id="gameover" class="overlay">
+    <div class="overlay-sweep" aria-hidden="true"></div>
     <div class="card">
-      <h1 id="winner-title">¡Ganador!</h1>
-      <p id="winner-text"></p>
+      <span class="card-overline">DECISIÓN FINAL</span>
+      <h1 id="winner-title">Ganador</h1>
+      <p id="winner-text">—</p>
       <div class="actions">
-        <button id="restart-btn" class="primary" type="button">Otra vez</button>
+        <button id="restart-btn" class="primary" type="button">
+          <span class="primary-text">Revancha</span>
+          <span class="primary-arrow" aria-hidden="true">→</span>
+        </button>
         <button id="back-btn" class="secondary" type="button">Cambiar modo</button>
       </div>
     </div>
