@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conjuga el verbo</title>
+  <meta name="description" content="Conjuga el verbo. Arrastra cada forma a su tiempo: pasado, presente o futuro." />
+  <script defer src="https://analytics.lu1s9.dev/script.js" data-website-id="b43d0a09-e1eb-4a2e-ba0b-0c2025f98c3b"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Cutive+Mono&family=Ultra&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="phase-idle">
+
+  <div class="page">
+
+    <!-- ───── MARGEN IZQUIERDO ───── -->
+    <aside class="margin margin-left" aria-hidden="true">
+      <div class="m-spine">A · B · C · D · E · F · G · H · I · J · K · L · M · N · Ñ · O · P · Q · R · S · T · U · V · W · X · Y · Z</div>
+
+      <div class="m-block m-specimen">
+        <span class="m-label">Espécimen</span>
+        <div class="m-alpha m-alpha-lc">a&nbsp;b&nbsp;c&nbsp;d&nbsp;e&nbsp;f<br/>g&nbsp;h&nbsp;i&nbsp;j&nbsp;k&nbsp;l<br/>m&nbsp;n&nbsp;ñ&nbsp;o&nbsp;p&nbsp;q<br/>r&nbsp;s&nbsp;t&nbsp;u&nbsp;v&nbsp;w<br/>x&nbsp;y&nbsp;z</div>
+      </div>
+
+      <div class="m-ornament">❦</div>
+
+      <div class="m-block">
+        <span class="m-label">Numerales</span>
+        <div class="m-numerals">0 1 2 3 4 5 6 7 8 9</div>
+        <div class="m-romans">I · II · III · IV · V · VI · VII · VIII · IX · X</div>
+      </div>
+    </aside>
+
+    <!-- ───── HOJA PRINCIPAL ───── -->
+    <main class="paper" role="main">
+
+      <a class="home-link" href="../../" aria-label="Volver al catálogo">← Volver</a>
+
+      <!-- IDLE -->
+      <section id="idle" class="idle">
+        <header class="masthead">
+          <span class="figref">cuaderno tipográfico · lengua española</span>
+          <h1 class="title">
+            Conjuga<br/>
+            <em>el verbo.</em>
+          </h1>
+          <p class="lede">
+            Arrastra cada forma del verbo a su tiempo. Pasado, presente o futuro.
+            Una palabra por vez, ocho rondas.
+          </p>
+        </header>
+
+        <div class="preview-card">
+          <div class="preview-verb">
+            <span class="preview-overline">ejemplo · verbo "comer"</span>
+            <div class="preview-tenses">
+              <div class="preview-tense"><span class="preview-label">pasado</span><span class="preview-form">comí</span></div>
+              <div class="preview-tense"><span class="preview-label">presente</span><span class="preview-form">como</span></div>
+              <div class="preview-tense"><span class="preview-label">futuro</span><span class="preview-form">comeré</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="picker">
+          <span class="picker-label">Selecciona el nivel</span>
+          <div class="opts">
+            <button class="opt" data-level="regulares" type="button">
+              <span class="opt-name">Regulares</span>
+              <span class="opt-desc">verbos que siguen un patrón fijo</span>
+            </button>
+            <button class="opt active" data-level="mixto" type="button">
+              <span class="opt-name">Mixto</span>
+              <span class="opt-desc">regulares e irregulares mezclados</span>
+            </button>
+            <button class="opt" data-level="irregulares" type="button">
+              <span class="opt-name">Irregulares</span>
+              <span class="opt-desc">verbos que rompen el patrón</span>
+            </button>
+          </div>
+        </div>
+
+        <button id="start-btn" class="primary" type="button">
+          <span class="primary-text">Componer</span>
+          <span class="primary-mark">⌘</span>
+        </button>
+
+        <footer class="idle-footer">
+          <span class="footer-mark">⁂</span>
+          <span class="footer-text">Tipos móviles · primera persona singular · indicativo</span>
+        </footer>
+      </section>
+
+      <!-- QUIZ -->
+      <section id="quiz" class="quiz">
+        <header class="quiz-head">
+          <div class="round-counter">
+            <span class="rc-label">Ronda</span>
+            <span class="rc-current" id="r-current">01</span>
+            <span class="rc-divider">/</span>
+            <span class="rc-total" id="r-total">08</span>
+          </div>
+          <div class="score-block">
+            <span class="score-label">Puntaje</span>
+            <span class="score-value" id="score">0</span>
+          </div>
+        </header>
+
+        <div class="verb-stage">
+          <span class="verb-overline">Verbo</span>
+          <h2 class="verb-word" id="verb-word">—</h2>
+          <span class="verb-meta" id="verb-meta">infinitivo</span>
+        </div>
+
+        <div class="tense-grid">
+          <div class="tense-zone" data-tense="pasado">
+            <span class="zone-eyebrow">i.</span>
+            <span class="zone-label">Pasado</span>
+            <div class="zone-target" data-target="pasado">
+              <span class="zone-placeholder" aria-hidden="true">algo que ya pasó</span>
+            </div>
+          </div>
+
+          <div class="tense-zone" data-tense="presente">
+            <span class="zone-eyebrow">ii.</span>
+            <span class="zone-label">Presente</span>
+            <div class="zone-target" data-target="presente">
+              <span class="zone-placeholder" aria-hidden="true">lo que pasa ahora</span>
+            </div>
+          </div>
+
+          <div class="tense-zone" data-tense="futuro">
+            <span class="zone-eyebrow">iii.</span>
+            <span class="zone-label">Futuro</span>
+            <div class="zone-target" data-target="futuro">
+              <span class="zone-placeholder" aria-hidden="true">lo que va a pasar</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chip-pool" id="chip-pool" aria-label="Tipos a colocar">
+          <!-- chips inyectados por JS -->
+        </div>
+
+        <p class="quiz-hint" id="quiz-hint">Arrastra cada forma a su tiempo correcto.</p>
+
+        <button id="quit-btn" class="ghost-quit" type="button">↩ Salir de la sesión</button>
+      </section>
+
+      <!-- RESULT -->
+      <section id="result" class="result">
+        <header class="result-head">
+          <span class="figref">composición terminada</span>
+          <h2 class="result-title" id="result-title">—</h2>
+        </header>
+
+        <div class="result-score-block">
+          <span class="result-score-label">Puntaje final</span>
+          <span class="result-score-value" id="final-score">0</span>
+        </div>
+
+        <ul class="result-stats">
+          <li>
+            <span class="stat-num" id="final-correct">0</span>
+            <span class="stat-label">correctas</span>
+          </li>
+          <li>
+            <span class="stat-num" id="final-errors">0</span>
+            <span class="stat-label">errores</span>
+          </li>
+          <li>
+            <span class="stat-num" id="final-perfect">0</span>
+            <span class="stat-label">a la primera</span>
+          </li>
+        </ul>
+
+        <div class="result-actions">
+          <button id="restart-btn" class="primary" type="button">
+            <span class="primary-text">Otra ronda</span>
+            <span class="primary-mark">↻</span>
+          </button>
+          <button id="back-btn" class="secondary" type="button">Cambiar nivel</button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ───── MARGEN DERECHO ───── -->
+    <aside class="margin margin-right" aria-hidden="true">
+      <div class="m-block m-quote">
+        <span class="m-quote-mark">«</span>
+        <p class="m-quote-text">
+          El verbo es la palabra que más viaja: trae el ayer, sostiene el hoy y prepara el mañana.
+        </p>
+        <span class="m-quote-source">— anónimo</span>
+      </div>
+
+      <div class="m-rule"></div>
+
+      <div class="m-block m-tenses">
+        <span class="m-label">Tres tiempos</span>
+        <ul class="m-tense-list">
+          <li><span class="m-roman">i</span>pretérito</li>
+          <li><span class="m-roman">ii</span>presente</li>
+          <li><span class="m-roman">iii</span>futuro</li>
+        </ul>
+      </div>
+
+      <div class="m-ornament m-ornament-rt">❦</div>
+
+      <div class="m-block m-colophon">
+        <span class="m-label">Colofón</span>
+        <div class="m-colophon-text">
+          impreso en<br/>tipos móviles<br/>—<br/>edición primera
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
