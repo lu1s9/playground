@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#efe4cd" />
+  <title>Línea del Tiempo · México</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="https://analytics.lu1s9.dev/script.js" data-website-id="b43d0a09-e1eb-4a2e-ba0b-0c2025f98c3b"></script>
+</head>
+<body class="phase-idle">
+
+  <!-- Decoración lateral izquierda (solo escritorio) -->
+  <aside class="margin margin-left" aria-hidden="true">
+    <div class="margin-stamp">
+      <span class="stamp-line">Edición</span>
+      <span class="stamp-line stamp-big">Escolar</span>
+      <span class="stamp-line">· MMXXVI ·</span>
+    </div>
+    <div class="margin-rule" aria-hidden="true"></div>
+    <div class="margin-meta">
+      <span>Serie</span>
+      <span class="meta-strong">Historia<br/>Nacional</span>
+      <span>Tomo I</span>
+      <span class="meta-divider">·</span>
+      <span>1810 — 1985</span>
+    </div>
+    <div class="margin-fleuron" aria-hidden="true">❦</div>
+  </aside>
+
+  <!-- Contenedor principal -->
+  <main class="stage">
+
+    <!-- ─── PORTADA ─── -->
+    <section class="screen screen-idle">
+      <div class="cover">
+        <div class="cover-eyebrow">— interactivo escolar · historia de méxico —</div>
+        <div class="cover-rule"></div>
+        <h1 class="cover-title">Línea<br/><em>del</em> Tiempo</h1>
+        <div class="cover-rule"></div>
+        <div class="cover-meta">
+          <span>Diez hitos</span>
+          <span class="dot">·</span>
+          <span>de 1810 a 1985</span>
+        </div>
+        <p class="cover-lede">
+          Coloca cada acontecimiento en el lugar que le corresponde dentro de la
+          historia. Decide si ocurrió <em>antes</em> o <em>después</em> de los que
+          ya están en la línea.
+        </p>
+        <button id="start-btn" class="btn btn-primary">Comenzar la lectura</button>
+        <div class="cover-colofon">
+          <span class="colofon-numeral">I</span>
+          <span class="colofon-text">Grito de Dolores</span>
+          <span class="colofon-dots">· · · · · · ·</span>
+          <span class="colofon-numeral">X</span>
+          <span class="colofon-text">Sismo de 1985</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── JUEGO ─── -->
+    <section class="screen screen-game">
+      <header class="game-header">
+        <div class="hdr-block hdr-left">
+          <span class="hdr-label">Acontecimiento</span>
+          <span class="hdr-count"><span id="r-current">01</span><em>de</em><span id="r-total">09</span></span>
+        </div>
+        <div class="hdr-rule" aria-hidden="true"></div>
+        <div class="hdr-block hdr-center">
+          <span class="hdr-label">Aciertos</span>
+          <span class="hdr-score" id="score">0</span>
+        </div>
+        <div class="hdr-rule" aria-hidden="true"></div>
+        <div class="hdr-block hdr-right">
+          <button id="quit-btn" class="btn-ghost">Salir</button>
+        </div>
+      </header>
+
+      <!-- Card pendiente -->
+      <div class="pending-zone">
+        <div class="pending-prompt">¿En qué momento ocurrió?</div>
+        <div class="pending-card-wrap">
+          <div class="card card-pending" id="pending-card">
+            <!-- contenido inyectado -->
+          </div>
+        </div>
+        <div class="pending-hint">Toca el lugar en la línea, o arrastra la card hasta allí.</div>
+      </div>
+
+      <!-- Línea del tiempo -->
+      <div class="timeline-wrap" id="timeline-wrap">
+        <div class="timeline-rule" aria-hidden="true"></div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+    </section>
+
+    <!-- ─── RESULTADO ─── -->
+    <section class="screen screen-result">
+      <div class="result-head">
+        <div class="result-eyebrow">— colofón —</div>
+        <h2 id="result-title">Línea del Tiempo · México</h2>
+        <p id="result-summary" class="result-summary"></p>
+      </div>
+
+      <div class="result-timeline-wrap">
+        <div class="timeline-rule" aria-hidden="true"></div>
+        <div class="result-timeline" id="result-timeline"></div>
+      </div>
+
+      <div class="result-stats">
+        <div class="stat">
+          <span class="stat-label">Aciertos</span>
+          <span class="stat-value"><span id="final-correct">0</span><em>de</em><span id="final-total">9</span></span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat">
+          <span class="stat-label">Tiempo</span>
+          <span class="stat-value" id="final-time">—</span>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button id="restart-btn" class="btn btn-primary">Jugar otra vez</button>
+        <a href="../../" class="btn-ghost">← Volver al catálogo</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Decoración lateral derecha (solo escritorio) -->
+  <aside class="margin margin-right" aria-hidden="true">
+    <div class="margin-cartouche">
+      <span class="cartouche-pre">— para —</span>
+      <span class="cartouche-main">la juventud<br/>mexicana</span>
+      <span class="cartouche-post">★ ★ ★</span>
+    </div>
+    <div class="margin-rule" aria-hidden="true"></div>
+    <div class="margin-numerals">
+      <span>I</span>
+      <span>II</span>
+      <span>III</span>
+      <span>IV</span>
+      <span>V</span>
+      <span>VI</span>
+      <span>VII</span>
+      <span>VIII</span>
+      <span>IX</span>
+      <span>X</span>
+    </div>
+    <div class="margin-fleuron" aria-hidden="true">❦</div>
+  </aside>
+
+  <script src="events.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
